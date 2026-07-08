@@ -1,5 +1,5 @@
 import { aiTools } from "@/data/ai-tools";
-
+import Link from "next/link";
 export default function FeaturedTools() {
   return (
     <section className="bg-[#050505] py-20 px-6">
@@ -49,14 +49,12 @@ export default function FeaturedTools() {
                   {tool.pricing}
                 </span>
 
-                <a
-                  href={tool.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-lg text-white transition"
-                >
-                  Visit →
-                </a>
+                <Link
+  href={`/tools/${tool.name.toLowerCase().replace(/\s+/g, "-")}`}
+  className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-lg text-white transition"
+>
+  View Details →
+</Link>
 
               </div>
 
