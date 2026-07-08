@@ -8,6 +8,12 @@ export interface AITool {
   rating: number;
   website: string;
   featured: boolean;
+
+  founded: string;
+  users: string;
+  platforms: string[];
+  pros: string[];
+  cons: string[];
 }
 
 export const aiTools: AITool[] = [
@@ -21,7 +27,23 @@ export const aiTools: AITool[] = [
     rating: 4.9,
     website: "https://chatgpt.com",
     featured: true,
+
+    founded: "2022",
+    users: "500M+",
+    platforms: ["Web", "Android", "iPhone", "Windows", "Mac"],
+
+    pros: [
+      "Very accurate",
+      "Fast responses",
+      "Excellent coding",
+    ],
+
+    cons: [
+      "Free plan has limits",
+      "Requires internet",
+    ],
   },
+
   {
     id: 2,
     name: "Claude",
@@ -32,7 +54,14 @@ export const aiTools: AITool[] = [
     rating: 4.8,
     website: "https://claude.ai",
     featured: true,
+
+    founded: "",
+    users: "",
+    platforms: [],
+    pros: [],
+    cons: [],
   },
+
   {
     id: 3,
     name: "Gemini",
@@ -43,5 +72,11 @@ export const aiTools: AITool[] = [
     rating: 4.7,
     website: "https://gemini.google.com",
     featured: true,
+
+    founded: "",
+    users: "",
+    platforms: [],
+    pros: [],
+    cons: [],
   },
 ];
