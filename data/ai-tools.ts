@@ -1,20 +1,4 @@
-export interface AITool {
-  id: number;
-  name: string;
-  company: string;
-  category: string;
-  description: string;
-  pricing: "Free" | "Paid" | "Freemium";
-  rating: number;
-  website: string;
-  featured: boolean;
-
-  founded: string;
-  users: string;
-  platforms: string[];
-  pros: string[];
-  cons: string[];
-}
+import { AITool } from "@/types/ai-tool";
 
 export const aiTools: AITool[] = [
   {
@@ -22,25 +6,40 @@ export const aiTools: AITool[] = [
     name: "ChatGPT",
     company: "OpenAI",
     category: "AI Assistant",
-    description: "TEST BY MOHIT 123",
+    description: "The world's most popular AI assistant for writing, coding, research, brainstorming, and productivity.",
     pricing: "Freemium",
     rating: 4.9,
     website: "https://chatgpt.com",
     featured: true,
 
+    logo: "/logos/chatgpt.png",
+
     founded: "2022",
     users: "500M+",
-    platforms: ["Web", "Android", "iPhone", "Windows", "Mac"],
+
+    platforms: [
+      "Web",
+      "Android",
+      "iPhone",
+      "Windows",
+      "Mac",
+    ],
 
     pros: [
-      "Very accurate",
-      "Fast responses",
-      "Excellent coding",
+      "Excellent reasoning",
+      "Powerful coding assistant",
+      "Fast and accurate responses",
     ],
 
     cons: [
       "Free plan has limits",
-      "Requires internet",
+      "Internet required",
+    ],
+
+    tags: [
+      "Chatbot",
+      "Coding",
+      "Writing",
     ],
   },
 
@@ -48,18 +47,40 @@ export const aiTools: AITool[] = [
     id: 2,
     name: "Claude",
     company: "Anthropic",
-    category: "Writing",
-    description: "Powerful AI assistant for writing and coding.",
+    category: "AI Assistant",
+    description: "Advanced AI assistant with excellent writing and long-context reasoning capabilities.",
     pricing: "Freemium",
     rating: 4.8,
     website: "https://claude.ai",
     featured: true,
 
-    founded: "",
-    users: "",
-    platforms: [],
-    pros: [],
-    cons: [],
+    logo: "/logos/claude.png",
+
+    founded: "2023",
+    users: "20M+",
+
+    platforms: [
+      "Web",
+      "Android",
+      "iPhone",
+    ],
+
+    pros: [
+      "Excellent writing",
+      "Very large context window",
+      "Great reasoning",
+    ],
+
+    cons: [
+      "Limited free usage",
+      "Not available in some regions",
+    ],
+
+    tags: [
+      "Writing",
+      "Coding",
+      "Reasoning",
+    ],
   },
 
   {
@@ -67,16 +88,38 @@ export const aiTools: AITool[] = [
     name: "Gemini",
     company: "Google",
     category: "AI Assistant",
-    description: "Google's multimodal AI assistant.",
+    description: "Google's multimodal AI assistant integrated with Google Workspace.",
     pricing: "Free",
     rating: 4.7,
     website: "https://gemini.google.com",
     featured: true,
 
-    founded: "",
-    users: "",
-    platforms: [],
-    pros: [],
-    cons: [],
+    logo: "/logos/gemini.png",
+
+    founded: "2023",
+    users: "100M+",
+
+    platforms: [
+      "Web",
+      "Android",
+      "iPhone",
+    ],
+
+    pros: [
+      "Google integration",
+      "Fast responses",
+      "Multimodal AI",
+    ],
+
+    cons: [
+      "Some features require paid plan",
+      "Performance varies by task",
+    ],
+
+    tags: [
+      "Google",
+      "Chatbot",
+      "Search",
+    ],
   },
 ];
