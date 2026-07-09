@@ -11,23 +11,27 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-8 text-gray-300 font-medium">
 
-          <Link href="/tools" className="hover:text-blue-500 duration-300">
-  AI Tools
-</Link>
+  <Link href="/tools" className="hover:text-blue-500 duration-300">
+    AI Tools
+  </Link>
 
-          <Link href="/prompts" className="hover:text-blue-500 duration-300">
-  Prompt Library
-</Link>
+  <Link href="/compare" className="hover:text-blue-500 duration-300">
+    Compare
+  </Link>
 
-          <Link href="/categories" className="hover:text-blue-500 duration-300">
-  Categories
-</Link>
+  <Link href="/prompts" className="hover:text-blue-500 duration-300">
+    Prompt Library
+  </Link>
 
-          <Link href="/blog" className="hover:text-blue-500 duration-300">
-  Blog
-</Link>
+  <Link href="/categories" className="hover:text-blue-500 duration-300">
+    Categories
+  </Link>
 
-        </div>
+  <Link href="/blog" className="hover:text-blue-500 duration-300">
+    Blog
+  </Link>
+
+</div>
 
         <button className="bg-blue-600 hover:bg-blue-700 duration-300 px-5 py-2 rounded-lg">
           Login

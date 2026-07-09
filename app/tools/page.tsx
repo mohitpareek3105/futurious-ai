@@ -3,11 +3,13 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { aiTools } from "@/data/ai-tools";
-
+import { useFavorites } from "@/hooks/useFavorites";
+import { useCompare } from "@/hooks/useCompare";
 export default function ToolsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [search, setSearch] = useState("");
-
+const { toggleFavorite, isFavorite } = useFavorites();
+const { toggleCompare, isCompared, compare } = useCompare();
   const categories = useMemo(() => {
     return [
       "All",
@@ -38,6 +40,9 @@ export default function ToolsPage() {
       <div className="max-w-7xl mx-auto">
 
         <h1 className="text-5xl font-bold text-center mt-16">
+          <p className="text-center text-blue-400 mt-4">
+  Compare Selected: {compare.length} / 4
+</p>
           All AI Tools
         </h1>
 
@@ -82,15 +87,39 @@ export default function ToolsPage() {
               key={tool.id}
               className="bg-[#111827] border border-gray-800 rounded-2xl p-6 hover:border-blue-500 hover:-translate-y-2 transition duration-300"
             >
-              <div className="flex justify-between">
+              <div className="flex justify-between items-start">
 
                 <div className="w-14 h-14 rounded-xl bg-white text-black flex items-center justify-center text-2xl font-bold">
                   {tool.name.charAt(0)}
                 </div>
 
-                <span className="text-yellow-400">
-                  ⭐ {tool.rating}
-                </span>
+                <div className="flex items-center gap-3">
+
+  <button
+    onClick={() => toggleFavorite(tool.id)}
+    className="text-2xl hover:scale-125 transition"
+    title="Favorite"
+  >
+    {isFavorite(tool.id) ? "❤️" : "🤍"}
+  </button>
+
+  <button
+    onClick={() => toggleCompare(tool.id)}
+    className={`px-3 py-1 rounded-lg text-sm transition ${
+      isCompared(tool.id)
+        ? "bg-green-600"
+        : "bg-gray-700 hover:bg-blue-600"
+    }`}
+    title="Compare"
+  >
+    ⚖️
+  </button>
+
+  <span className="text-yellow-400">
+    ⭐ {tool.rating}
+  </span>
+
+</div>
 
               </div>
 
