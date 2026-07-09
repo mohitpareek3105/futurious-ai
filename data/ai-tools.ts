@@ -47,7 +47,7 @@ export const aiTools: AITool[] = [
     id: 2,
     name: "Claude",
     company: "Anthropic",
-    category: "AI Assistant",
+    category: "Writing",
     description: "Advanced AI assistant with excellent writing and long-context reasoning capabilities.",
     pricing: "Freemium",
     rating: 4.8,
