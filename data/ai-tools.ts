@@ -74,7 +74,7 @@ export const aiTools: AITool[] = [
     ],
 
     api: true,
-
+openSource: false,
     languages: [
       "English",
       "Hindi",
@@ -150,7 +150,7 @@ export const aiTools: AITool[] = [
     ],
 
     api: true,
-
+openSource: false,
     languages: [
       "English",
     ],
@@ -221,7 +221,7 @@ export const aiTools: AITool[] = [
     ],
 
     api: true,
-
+openSource: false,
     languages: [
       "English",
       "Hindi",

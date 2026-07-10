@@ -31,6 +31,8 @@ export interface AITool {
 
   api: boolean;
 
+  openSource: boolean;
+
   languages: string[];
 
   featured: boolean;

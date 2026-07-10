@@ -32,80 +32,227 @@ export default function ComparePage() {
 
             <Link
               href="/tools"
-              className="inline-block mt-8 bg-blue-600 px-6 py-3 rounded-xl hover:bg-blue-700"
+              className="inline-block mt-8 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl"
             >
               Browse AI Tools
             </Link>
 
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-2xl border border-gray-800">
 
-            <table className="w-full border border-gray-800">
+            <table className="w-full">
 
               <tbody>
 
-                <tr className="border-b border-gray-800">
-                  <td className="p-4 font-bold">Tool</td>
+                {/* Tool */}
+
+                <tr className="border-b border-gray-800 bg-[#111827]">
+                  <td className="p-5 font-bold w-52">
+                    Tool
+                  </td>
 
                   {selectedTools.map((tool) => (
                     <td
                       key={tool.id}
-                      className="p-4 text-center font-bold"
+                      className="p-5 text-center font-bold text-xl"
                     >
                       {tool.name}
                     </td>
                   ))}
                 </tr>
 
+                {/* Company */}
+
                 <tr className="border-b border-gray-800">
-                  <td className="p-4 font-bold">Company</td>
+                  <td className="p-5 font-semibold">
+                    Company
+                  </td>
 
                   {selectedTools.map((tool) => (
                     <td
                       key={tool.id}
-                      className="p-4 text-center"
+                      className="p-5 text-center"
                     >
                       {tool.company}
                     </td>
                   ))}
                 </tr>
 
-                <tr className="border-b border-gray-800">
-                  <td className="p-4 font-bold">Rating</td>
+                {/* Rating */}
+
+                <tr className="border-b border-gray-800 bg-[#111827]">
+                  <td className="p-5 font-semibold">
+                    Rating
+                  </td>
 
                   {selectedTools.map((tool) => (
                     <td
                       key={tool.id}
-                      className="p-4 text-center"
+                      className="p-5 text-center text-yellow-400 font-bold"
                     >
                       ⭐ {tool.rating}
                     </td>
                   ))}
                 </tr>
 
+                {/* Pricing */}
+
                 <tr className="border-b border-gray-800">
-                  <td className="p-4 font-bold">Pricing</td>
+                  <td className="p-5 font-semibold">
+                    Pricing
+                  </td>
 
                   {selectedTools.map((tool) => (
                     <td
                       key={tool.id}
-                      className="p-4 text-center"
+                      className="p-5 text-center text-green-400"
                     >
                       {tool.pricing}
                     </td>
                   ))}
                 </tr>
 
-                <tr className="border-b border-gray-800">
-                  <td className="p-4 font-bold">Category</td>
+                {/* Founded */}
+
+                <tr className="border-b border-gray-800 bg-[#111827]">
+                  <td className="p-5 font-semibold">
+                    Founded
+                  </td>
 
                   {selectedTools.map((tool) => (
                     <td
                       key={tool.id}
-                      className="p-4 text-center"
+                      className="p-5 text-center"
                     >
-                      {tool.category}
+                      {tool.founded}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Users */}
+
+                <tr className="border-b border-gray-800">
+                  <td className="p-5 font-semibold">
+                    Users
+                  </td>
+
+                  {selectedTools.map((tool) => (
+                    <td
+                      key={tool.id}
+                      className="p-5 text-center"
+                    >
+                      {tool.users}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* API */}
+
+                <tr className="border-b border-gray-800 bg-[#111827]">
+                  <td className="p-5 font-semibold">
+                    API
+                  </td>
+
+                  {selectedTools.map((tool) => (
+                    <td
+                      key={tool.id}
+                      className="p-5 text-center text-2xl"
+                    >
+                      {tool.api ? "✅" : "❌"}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Open Source */}
+
+                <tr className="border-b border-gray-800">
+                  <td className="p-5 font-semibold">
+                    Open Source
+                  </td>
+
+                  {selectedTools.map((tool) => (
+                    <td
+                      key={tool.id}
+                      className="p-5 text-center text-2xl"
+                    >
+                      {tool.openSource ? "✅" : "❌"}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Languages */}
+
+                <tr className="border-b border-gray-800 bg-[#111827]">
+                  <td className="p-5 font-semibold">
+                    Languages
+                  </td>
+
+                  {selectedTools.map((tool) => (
+                    <td
+                      key={tool.id}
+                      className="p-5"
+                    >
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {tool.languages.map((lang) => (
+                          <span
+                            key={lang}
+                            className="bg-gray-800 px-2 py-1 rounded-full text-xs"
+                          >
+                            {lang}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Platforms */}
+
+                <tr className="border-b border-gray-800">
+                  <td className="p-5 font-semibold">
+                    Platforms
+                  </td>
+
+                  {selectedTools.map((tool) => (
+                    <td
+                      key={tool.id}
+                      className="p-5"
+                    >
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {tool.platforms.map((platform) => (
+                          <span
+                            key={platform}
+                            className="bg-blue-900/30 border border-blue-700 px-2 py-1 rounded-full text-xs"
+                          >
+                            {platform}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Website */}
+
+                <tr className="bg-[#111827]">
+                  <td className="p-5 font-semibold">
+                    Official Website
+                  </td>
+
+                  {selectedTools.map((tool) => (
+                    <td
+                      key={tool.id}
+                      className="p-5 text-center"
+                    >
+                      <a
+                        href={tool.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
+                      >
+                        Visit →
+                      </a>
                     </td>
                   ))}
                 </tr>
