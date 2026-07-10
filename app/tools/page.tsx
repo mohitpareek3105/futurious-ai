@@ -1,22 +1,28 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { aiTools } from "@/data/ai-tools";
-import { useFavorites } from "@/hooks/useFavorites";
-import { useCompare } from "@/hooks/useCompare";
+import { useAppStore } from "@/store/appStore";
 export default function ToolsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [search, setSearch] = useState("");
-const { toggleFavorite, isFavorite } = useFavorites();
-const { toggleCompare, isCompared, compare } = useCompare();
+const {
+  favorites,
+  compare,
+  toggleFavorite,
+  toggleCompare,
+  loadData,
+} = useAppStore();
   const categories = useMemo(() => {
     return [
       "All",
       ...new Set(aiTools.map((tool) => tool.category)),
     ];
   }, []);
-
+useEffect(() => {
+  loadData();
+}, [loadData]);
   const filteredTools = aiTools.filter((tool) => {
     const matchesCategory =
       selectedCategory === "All" ||
@@ -100,13 +106,13 @@ const { toggleCompare, isCompared, compare } = useCompare();
     className="text-2xl hover:scale-125 transition"
     title="Favorite"
   >
-    {isFavorite(tool.id) ? "❤️" : "🤍"}
+    {favorites.includes(tool.id) ? "❤️" : "🤍"}
   </button>
 
   <button
     onClick={() => toggleCompare(tool.id)}
     className={`px-3 py-1 rounded-lg text-sm transition ${
-      isCompared(tool.id)
+      compare.includes(tool.id)
         ? "bg-green-600"
         : "bg-gray-700 hover:bg-blue-600"
     }`}

@@ -3,28 +3,37 @@ export interface AITool {
 
   name: string;
   company: string;
+  website: string;
+  logo: string;
+  coverImage: string;
+
   category: string;
+  tags: string[];
+
   description: string;
 
-  pricing: "Free" | "Freemium" | "Paid";
-
+  pricing: string;
   rating: number;
 
-  website: string;
-
-  featured: boolean;
-
-  logo: string;
-
   founded: string;
-
   users: string;
 
   platforms: string[];
 
-  pros: string[];
+  features: string[];
 
+  pros: string[];
   cons: string[];
 
-  tags: string[];
+  useCases: string[];
+
+  integrations: string[];
+
+  api: boolean;
+
+  languages: string[];
+
+  featured: boolean;
+
+  lastUpdated: string;
 }

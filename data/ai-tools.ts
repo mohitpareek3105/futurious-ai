@@ -5,30 +5,52 @@ export const aiTools: AITool[] = [
     id: 1,
     name: "ChatGPT",
     company: "OpenAI",
-    category: "AI Assistant",
-    description: "The world's most popular AI assistant for writing, coding, research, brainstorming, and productivity.",
-    pricing: "Freemium",
-    rating: 4.9,
     website: "https://chatgpt.com",
-    featured: true,
-
     logo: "/logos/chatgpt.png",
+    coverImage: "/covers/chatgpt.jpg",
+
+    category: "AI Assistant",
+
+    tags: [
+      "Chatbot",
+      "Writing",
+      "Coding",
+      "Research",
+      "Productivity",
+    ],
+
+    description:
+      "The world's most popular AI assistant for writing, coding, research and productivity.",
+
+    pricing: "Freemium",
+
+    rating: 4.9,
 
     founded: "2022",
+
     users: "500M+",
 
     platforms: [
       "Web",
-      "Android",
-      "iPhone",
       "Windows",
       "Mac",
+      "Android",
+      "iPhone",
+    ],
+
+    features: [
+      "Writing",
+      "Coding",
+      "Image Generation",
+      "Voice",
+      "Deep Research",
+      "Vision",
     ],
 
     pros: [
       "Excellent reasoning",
-      "Powerful coding assistant",
-      "Fast and accurate responses",
+      "Fast responses",
+      "Best coding assistant",
     ],
 
     cons: [
@@ -36,27 +58,60 @@ export const aiTools: AITool[] = [
       "Internet required",
     ],
 
-    tags: [
-      "Chatbot",
-      "Coding",
-      "Writing",
+    useCases: [
+      "Students",
+      "Developers",
+      "Marketing",
+      "Business",
+      "Content Creation",
     ],
+
+    integrations: [
+      "Google Drive",
+      "GitHub",
+      "Zapier",
+      "Slack",
+    ],
+
+    api: true,
+
+    languages: [
+      "English",
+      "Hindi",
+      "Spanish",
+      "French",
+    ],
+
+    featured: true,
+
+    lastUpdated: "2026-07-10",
   },
 
   {
     id: 2,
     name: "Claude",
     company: "Anthropic",
-    category: "Writing",
-    description: "Advanced AI assistant with excellent writing and long-context reasoning capabilities.",
-    pricing: "Freemium",
-    rating: 4.8,
     website: "https://claude.ai",
-    featured: true,
-
     logo: "/logos/claude.png",
+    coverImage: "/covers/claude.jpg",
+
+    category: "AI Assistant",
+
+    tags: [
+      "Writing",
+      "Coding",
+      "Reasoning",
+    ],
+
+    description:
+      "Advanced AI assistant with excellent writing and long-context reasoning.",
+
+    pricing: "Freemium",
+
+    rating: 4.8,
 
     founded: "2023",
+
     users: "20M+",
 
     platforms: [
@@ -65,38 +120,71 @@ export const aiTools: AITool[] = [
       "iPhone",
     ],
 
+    features: [
+      "Writing",
+      "Coding",
+      "Long Context",
+      "Reasoning",
+    ],
+
     pros: [
       "Excellent writing",
-      "Very large context window",
+      "Large context window",
       "Great reasoning",
     ],
 
     cons: [
       "Limited free usage",
-      "Not available in some regions",
+      "Regional availability",
     ],
 
-    tags: [
+    useCases: [
       "Writing",
       "Coding",
-      "Reasoning",
+      "Research",
     ],
+
+    integrations: [
+      "API",
+      "GitHub",
+    ],
+
+    api: true,
+
+    languages: [
+      "English",
+    ],
+
+    featured: true,
+
+    lastUpdated: "2026-07-10",
   },
 
   {
     id: 3,
     name: "Gemini",
     company: "Google",
-    category: "AI Assistant",
-    description: "Google's multimodal AI assistant integrated with Google Workspace.",
-    pricing: "Free",
-    rating: 4.7,
     website: "https://gemini.google.com",
-    featured: true,
-
     logo: "/logos/gemini.png",
+    coverImage: "/covers/gemini.jpg",
+
+    category: "AI Assistant",
+
+    tags: [
+      "Google",
+      "Search",
+      "Chatbot",
+    ],
+
+    description:
+      "Google's multimodal AI assistant integrated with Google Workspace.",
+
+    pricing: "Free",
+
+    rating: 4.7,
 
     founded: "2023",
+
     users: "100M+",
 
     platforms: [
@@ -105,21 +193,42 @@ export const aiTools: AITool[] = [
       "iPhone",
     ],
 
+    features: [
+      "Search",
+      "Writing",
+      "Image Understanding",
+    ],
+
     pros: [
-      "Google integration",
+      "Google ecosystem",
       "Fast responses",
-      "Multimodal AI",
     ],
 
     cons: [
-      "Some features require paid plan",
-      "Performance varies by task",
+      "Advanced features need subscription",
     ],
 
-    tags: [
-      "Google",
-      "Chatbot",
+    useCases: [
+      "Students",
       "Search",
+      "Office Work",
     ],
+
+    integrations: [
+      "Google Docs",
+      "Gmail",
+      "Drive",
+    ],
+
+    api: true,
+
+    languages: [
+      "English",
+      "Hindi",
+    ],
+
+    featured: true,
+
+    lastUpdated: "2026-07-10",
   },
 ];
