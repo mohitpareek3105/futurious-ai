@@ -1,9 +1,13 @@
 import { aiTools } from "@/data/ai-tools";
 import Link from "next/link";
+
 import ToolHeader from "@/components/tool/ToolHeader";
+import ToolQuickInfo from "@/components/tool/ToolQuickInfo";
 import ToolFeatures from "@/components/tool/ToolFeatures";
+import ToolUseCases from "@/components/tool/ToolUseCases";
+import ToolIntegrations from "@/components/tool/ToolIntegrations";
+import ToolLanguages from "@/components/tool/ToolLanguages";
 import ToolProsCons from "@/components/tool/ToolProsCons";
-import ToolInfo from "@/components/tool/ToolInfo";
 import SimilarTools from "@/components/tool/SimilarTools";
 type Props = {
   params: Promise<{
@@ -50,7 +54,12 @@ export default async function ToolPage({ params }: Props) {
         </Link>
 
         <ToolHeader tool={tool} />
-
+<ToolQuickInfo
+  founded={tool.founded}
+  users={tool.users}
+  pricing={tool.pricing}
+  rating={tool.rating}
+/>
         {/* Description */}
 
         <div className="mt-12">
@@ -66,16 +75,24 @@ export default async function ToolPage({ params }: Props) {
         </div>
 
         <ToolFeatures features={tool.features} />
-
-        <ToolProsCons
-          pros={tool.pros}
-          cons={tool.cons}
-        />
-<ToolInfo
-  founded={tool.founded}
-  users={tool.users}
-  platforms={tool.platforms}
+<ToolUseCases
+  useCases={tool.useCases}
 />
+<ToolLanguages
+  languages={tool.languages}
+/>
+<ToolIntegrations
+  integrations={tool.integrations}
+  api={tool.api}
+/>
+<ToolProsCons
+  pros={tool.pros}
+  cons={tool.cons}
+/>
+<SimilarTools
+  currentTool={tool}
+/>
+        
         {/* Tags */}
 
         <div className="mt-16">
@@ -109,8 +126,6 @@ export default async function ToolPage({ params }: Props) {
         >
           Visit Official Website →
           </a>
-
-<SimilarTools currentTool={tool} />
 
       </div>
     </main>

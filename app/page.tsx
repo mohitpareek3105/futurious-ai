@@ -1,25 +1,20 @@
-import Hero from "@/components/home/Hero";
-import Stats from "@/components/home/Stats";
-
-import Search from "@/components/Search";
+import Hero from "@/components/Hero";
 import FeaturedTools from "@/components/FeaturedTools";
+import Search from "@/components/Search";
+
+import HomeCategories from "@/components/home/HomeCategories";
+import HomeStats from "@/components/home/HomeStats";
+import CTA from "@/components/home/CTA";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
-
-      <div className="max-w-7xl mx-auto px-6">
-
-        <Hero />
-
-        <Stats />
-
-        <Search />
-
-        <FeaturedTools />
-
-      </div>
-
-    </main>
+    <>
+      <Hero />
+      <HomeStats />
+      <Search />
+      <FeaturedTools />
+      <HomeCategories />
+      <CTA />
+    </>
   );
 }

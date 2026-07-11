@@ -1,46 +1,74 @@
-import Link from "next/link";
+"use client";
 
-export default function PromptsPage() {
-  const prompts = [
-    "ChatGPT Prompts",
-    "Midjourney Prompts",
-    "Claude Prompts",
-    "Gemini Prompts",
-    "Coding Prompts",
-    "Marketing Prompts",
-    "SEO Prompts",
-    "Business Prompts",
+import { useState } from "react";
+
+import { prompts } from "@/data/prompts";
+
+import PromptCard from "@/components/prompt/PromptCard";
+import PromptSearch from "@/components/prompt/PromptSearch";
+import PromptCategory from "@/components/prompt/PromptCategory";
+
+export default function PromptLibrary() {
+
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState("All");
+
+  const categories = [
+    ...new Set(prompts.map((p) => p.category)),
   ];
 
+  const filteredPrompts = prompts.filter((prompt) => {
+
+    const matchCategory =
+      selected === "All"
+        ? true
+        : prompt.category === selected;
+
+    const matchSearch =
+      prompt.title
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+    return matchCategory && matchSearch;
+  });
+
   return (
-    <main className="min-h-screen bg-[#050505] text-white px-6 py-20">
-      <div className="max-w-7xl mx-auto">
+    <main className="min-h-screen bg-[#050505] text-white px-6 py-16">
+
+      <div className="max-w-7xl mx-auto mt-16">
 
         <h1 className="text-5xl font-bold text-center">
           Prompt Library
         </h1>
 
-        <p className="text-center text-gray-400 mt-4 mb-16">
-          Discover high-quality AI prompts for every use case.
+        <p className="text-center text-gray-400 mt-5 mb-12">
+          Discover ready-to-use AI prompts.
         </p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <PromptSearch
+          search={search}
+          setSearch={setSearch}
+        />
 
-          {prompts.map((prompt) => (
-            <Link
-              key={prompt}
-              href="#"
-              className="bg-[#111827] border border-gray-800 rounded-2xl p-8 hover:border-blue-500 hover:-translate-y-2 transition-all duration-300 text-center"
-            >
-              <h2 className="text-xl font-bold">
-                {prompt}
-              </h2>
-            </Link>
+        <PromptCategory
+          categories={categories}
+          selected={selected}
+          setSelected={setSelected}
+        />
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          {filteredPrompts.map((prompt) => (
+            <PromptCard
+              key={prompt.id}
+              prompt={prompt}
+            />
           ))}
 
         </div>
 
       </div>
+
     </main>
   );
 }
