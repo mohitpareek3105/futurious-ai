@@ -138,3 +138,70 @@ export async function getSimilarTools(
 
   return (data as ToolRow[]).map(mapTool);
 }
+export async function getToolsByCategorySlug(
+  slug: string
+): Promise<AITool[]> {
+  const categoryName = decodeURIComponent(slug)
+    .trim()
+    .replace(/-/g, " ");
+
+  const { data, error } = await supabase
+    .from("tools")
+    .select("*")
+    .ilike("category", categoryName)
+    .order("rating", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch category tools:", {
+      slug,
+      categoryName,
+      message: error.message,
+    });
+
+    return [];
+  }
+
+  return (data as ToolRow[]).map(mapTool);
+}
+
+export async function getTopRatedTools(
+  limit = 5
+): Promise<AITool[]> {
+  const { data, error } = await supabase
+    .from("tools")
+    .select("*")
+    .order("rating", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("Failed to fetch top rated tools:", {
+      limit,
+      message: error.message,
+    });
+
+    return [];
+  }
+
+  return (data as ToolRow[]).map(mapTool);
+}
+
+export async function getTrendingTools(
+  limit = 6
+): Promise<AITool[]> {
+  const { data, error } = await supabase
+    .from("tools")
+    .select("*")
+    .order("id", { ascending: true })
+    .limit(limit);
+
+  if (error) {
+    console.error("Failed to fetch trending tools:", {
+      limit,
+      message: error.message,
+    });
+
+    return [];
+  }
+
+  return (data as ToolRow[]).map(mapTool);
+}
