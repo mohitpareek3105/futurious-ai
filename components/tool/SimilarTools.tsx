@@ -1,61 +1,54 @@
 import Link from "next/link";
-import { aiTools } from "@/data/ai-tools";
-import { AITool } from "@/types/ai-tool";
+
+import { getSimilarTools } from "@/lib/tools";
+import type { AITool } from "@/types/ai-tool";
 
 type Props = {
   currentTool: AITool;
 };
 
-export default function SimilarTools({
+export default async function SimilarTools({
   currentTool,
 }: Props) {
-  const similarTools = aiTools
-    .filter(
-      (tool) =>
-        tool.category === currentTool.category &&
-        tool.id !== currentTool.id
-    )
-    .slice(0, 3);
+  const similarTools = await getSimilarTools(
+    currentTool.id,
+    currentTool.category,
+    3
+  );
 
-  if (similarTools.length === 0) return null;
+  if (similarTools.length === 0) {
+    return null;
+  }
 
   return (
     <section className="mt-20">
-
-      <h2 className="text-3xl font-bold mb-8">
+      <h2 className="mb-8 text-3xl font-bold">
         🔥 Similar AI Tools
       </h2>
 
-      <div className="grid md:grid-cols-3 gap-6">
-
+      <div className="grid gap-6 md:grid-cols-3">
         {similarTools.map((tool) => (
-
           <Link
             key={tool.id}
             href={`/tools/${tool.name
               .toLowerCase()
               .replace(/\s+/g, "-")}`}
-            className="bg-[#111827] border border-gray-800 rounded-2xl p-6 hover:border-blue-500 transition"
+            className="rounded-2xl border border-gray-800 bg-[#111827] p-6 transition hover:border-blue-500"
           >
-
             <h3 className="text-2xl font-bold">
               {tool.name}
             </h3>
 
-            <p className="text-gray-400 mt-2">
+            <p className="mt-2 text-gray-400">
               {tool.company}
             </p>
 
             <div className="mt-4 text-yellow-400">
               ⭐ {tool.rating}
             </div>
-
           </Link>
-
         ))}
-
       </div>
-
     </section>
   );
 }

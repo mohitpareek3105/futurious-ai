@@ -1,77 +1,60 @@
-import { aiTools } from "@/data/ai-tools";
 import Link from "next/link";
 
-export default function FeaturedTools() {
-  return (
-    <section className="bg-[#050505] py-20 px-6">
-      <div className="max-w-7xl mx-auto">
+import { getFeaturedTools } from "@/lib/tools";
 
-        <h2 className="text-5xl font-bold text-center text-white">
+export default async function FeaturedTools() {
+  const aiTools = await getFeaturedTools();
+
+  return (
+    <section className="bg-[#050505] px-6 py-20">
+      <div className="mx-auto max-w-7xl">
+        <h2 className="text-center text-5xl font-bold text-white">
           Featured AI Tools
         </h2>
 
-        <p className="text-gray-400 text-center mt-4 mb-14">
-          Discover the world's best AI tools.
+        <p className="mt-4 mb-14 text-center text-gray-400">
+          Discover the world&apos;s best AI tools.
         </p>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-
           {aiTools.map((tool) => (
             <div
               key={tool.id}
-              className="bg-[#111827] border border-gray-800 rounded-2xl p-6 hover:border-blue-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300"
+              className="rounded-2xl border border-gray-800 bg-[#111827] p-6 transition-all duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20"
             >
-
-              {/* Top */}
-
-              <div className="flex justify-between items-start">
-
-                <div className="w-14 h-14 rounded-xl bg-white flex items-center justify-center text-black text-2xl font-bold">
+              <div className="flex items-start justify-between">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white text-2xl font-bold text-black">
                   {tool.name.charAt(0)}
                 </div>
 
-                <span className="text-yellow-400 font-semibold text-lg">
+                <span className="text-lg font-semibold text-yellow-400">
                   ⭐ {tool.rating}
                 </span>
-
               </div>
 
-              {/* Title */}
-
-              <h3 className="text-white text-3xl font-bold mt-6">
+              <h3 className="mt-6 text-3xl font-bold text-white">
                 {tool.name}
               </h3>
 
-              <p className="text-gray-400 mt-2">
-                {tool.company}
-              </p>
+              <p className="mt-2 text-gray-400">{tool.company}</p>
 
-              {/* Tags */}
-
-              <div className="flex flex-wrap gap-2 mt-5">
-
+              <div className="mt-5 flex flex-wrap gap-2">
                 {tool.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="bg-gray-800 text-gray-300 text-xs px-3 py-1 rounded-full"
+                    className="rounded-full bg-gray-800 px-3 py-1 text-xs text-gray-300"
                   >
                     {tag}
                   </span>
                 ))}
-
               </div>
 
-              {/* Description */}
-
-              <p className="text-gray-400 mt-6 leading-7">
+              <p className="mt-6 leading-7 text-gray-400">
                 {tool.description}
               </p>
 
-              {/* Footer */}
-
-              <div className="flex justify-between items-center mt-8">
-
-                <span className="text-green-400 font-semibold">
+              <div className="mt-8 flex items-center justify-between">
+                <span className="font-semibold text-green-400">
                   {tool.pricing}
                 </span>
 
@@ -79,18 +62,20 @@ export default function FeaturedTools() {
                   href={`/tools/${tool.name
                     .toLowerCase()
                     .replace(/\s+/g, "-")}`}
-                  className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-lg text-white transition"
+                  className="rounded-lg bg-blue-600 px-5 py-2 text-white transition hover:bg-blue-700"
                 >
                   View Details →
                 </Link>
-
               </div>
-
             </div>
           ))}
-
         </div>
 
+        {aiTools.length === 0 && (
+          <p className="mt-10 text-center text-gray-400">
+            No featured tools found.
+          </p>
+        )}
       </div>
     </section>
   );
