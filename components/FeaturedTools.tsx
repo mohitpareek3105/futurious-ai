@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import { getFeaturedTools } from "@/lib/tools";
 
@@ -28,7 +28,7 @@ export default async function FeaturedTools() {
                 </div>
 
                 <span className="text-lg font-semibold text-yellow-400">
-                  ⭐ {tool.rating}
+                  â­ {tool.rating}
                 </span>
               </div>
 
@@ -59,12 +59,10 @@ export default async function FeaturedTools() {
                 </span>
 
                 <Link
-                  href={`/tools/${tool.name
-                    .toLowerCase()
-                    .replace(/\s+/g, "-")}`}
+                  href={`/tools/${tool.slug}`}
                   className="rounded-lg bg-blue-600 px-5 py-2 text-white transition hover:bg-blue-700"
                 >
-                  View Details →
+                  View Details â†’
                 </Link>
               </div>
             </div>

@@ -19,10 +19,7 @@ export default async function TopRatedTools() {
         {tools.map((tool, index) => (
           <Link
             key={tool.id}
-            href={`/tools/${tool.name
-              .toLowerCase()
-              .trim()
-              .replace(/\s+/g, "-")}`}
+            href={`/tools/${tool.slug}`}
             className="flex items-center justify-between rounded-xl border border-gray-800 bg-[#111827] p-5 transition hover:border-blue-500"
           >
             <div className="flex items-center gap-5">
@@ -50,3 +47,4 @@ export default async function TopRatedTools() {
     </section>
   );
 }
+

@@ -1,7 +1,8 @@
-export interface AITool {
+﻿export interface AITool {
   id: number;
 
   name: string;
+  slug: string;
   company: string;
   website: string;
   logo: string;

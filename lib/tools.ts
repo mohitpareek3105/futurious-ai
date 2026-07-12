@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+﻿import { supabase } from "@/lib/supabase";
 import type { AITool } from "@/types/ai-tool";
 
 type ToolRow = {
@@ -33,6 +33,7 @@ function mapTool(tool: ToolRow): AITool {
   return {
     id: tool.id,
     name: tool.name,
+    slug: tool.slug,
     company: tool.company,
     website: tool.website,
     logo: tool.logo,
@@ -205,3 +206,4 @@ export async function getTrendingTools(
 
   return (data as ToolRow[]).map(mapTool);
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -66,12 +66,10 @@ export default function FavoritesClient({
                 </p>
 
                 <Link
-                  href={`/tools/${tool.name
-                    .toLowerCase()
-                    .replace(/\s+/g, "-")}`}
+                  href={`/tools/${tool.slug}`}
                   className="inline-block mt-6 bg-blue-600 px-5 py-2 rounded-lg"
                 >
-                  View Details →
+                  View Details â†’
                 </Link>
 
               </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -74,7 +74,7 @@ export default function ToolsClient({
 
         <input
           type="text"
-          placeholder="🔍 Search AI Tools..."
+          placeholder="ðŸ” Search AI Tools..."
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           className="mt-10 w-full rounded-xl border border-gray-700 bg-[#111827] px-6 py-4 outline-none"
@@ -120,7 +120,7 @@ export default function ToolsClient({
                     title="Favorite"
                     aria-label={`Toggle ${tool.name} favorite`}
                   >
-                    {favorites.includes(tool.id) ? "❤️" : "🤍"}
+                    {favorites.includes(tool.id) ? "â¤ï¸" : "ðŸ¤"}
                   </button>
 
                   <button
@@ -134,11 +134,11 @@ export default function ToolsClient({
                     title="Compare"
                     aria-label={`Toggle ${tool.name} comparison`}
                   >
-                    ⚖️
+                    âš–ï¸
                   </button>
 
                   <span className="text-yellow-400">
-                    ⭐ {tool.rating}
+                    â­ {tool.rating}
                   </span>
                 </div>
               </div>
@@ -172,12 +172,10 @@ export default function ToolsClient({
                 </span>
 
                 <Link
-                  href={`/tools/${tool.name
-                    .toLowerCase()
-                    .replace(/\s+/g, "-")}`}
+                  href={`/tools/${tool.slug}`}
                   className="rounded-lg bg-blue-600 px-5 py-2 hover:bg-blue-700"
                 >
-                  View Details →
+                  View Details â†’
                 </Link>
               </div>
             </div>

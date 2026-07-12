@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
@@ -30,7 +30,7 @@ export default function SearchClient({ tools }: Props) {
 
         <input
           type="text"
-          placeholder="🔍 Search AI tools..."
+          placeholder="ðŸ” Search AI tools..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="mt-10 w-full bg-zinc-900 border border-zinc-700 rounded-xl px-6 py-5 text-xl text-white outline-none"
@@ -41,9 +41,7 @@ export default function SearchClient({ tools }: Props) {
             filteredTools.map((tool) => (
               <Link
                 key={tool.id}
-                href={`/tools/${tool.name
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")}`}
+                href={`/tools/${tool.slug}`}
                 className="bg-zinc-900 border border-zinc-700 rounded-xl p-5 hover:border-blue-500 transition"
               >
                 <h3 className="text-white text-2xl font-bold">
@@ -60,7 +58,7 @@ export default function SearchClient({ tools }: Props) {
                   </span>
 
                   <span className="text-yellow-400">
-                    ⭐ {tool.rating}
+                    â­ {tool.rating}
                   </span>
                 </div>
               </Link>

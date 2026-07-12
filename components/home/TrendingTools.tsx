@@ -28,10 +28,7 @@ export default async function TrendingTools() {
         {tools.map((tool) => (
           <Link
             key={tool.id}
-            href={`/tools/${tool.name
-              .toLowerCase()
-              .trim()
-              .replace(/\s+/g, "-")}`}
+            href={`/tools/${tool.slug}`}
             className="rounded-2xl border border-gray-800 bg-[#111827] p-6 transition hover:border-blue-500"
           >
             <div className="flex items-center justify-between">
@@ -57,3 +54,4 @@ export default async function TrendingTools() {
     </section>
   );
 }
+

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import { getSimilarTools } from "@/lib/tools";
 import type { AITool } from "@/types/ai-tool";
@@ -23,16 +23,14 @@ export default async function SimilarTools({
   return (
     <section className="mt-20">
       <h2 className="mb-8 text-3xl font-bold">
-        🔥 Similar AI Tools
+        ðŸ”¥ Similar AI Tools
       </h2>
 
       <div className="grid gap-6 md:grid-cols-3">
         {similarTools.map((tool) => (
           <Link
             key={tool.id}
-            href={`/tools/${tool.name
-              .toLowerCase()
-              .replace(/\s+/g, "-")}`}
+            href={`/tools/${tool.slug}`}
             className="rounded-2xl border border-gray-800 bg-[#111827] p-6 transition hover:border-blue-500"
           >
             <h3 className="text-2xl font-bold">
@@ -44,7 +42,7 @@ export default async function SimilarTools({
             </p>
 
             <div className="mt-4 text-yellow-400">
-              ⭐ {tool.rating}
+              â­ {tool.rating}
             </div>
           </Link>
         ))}
