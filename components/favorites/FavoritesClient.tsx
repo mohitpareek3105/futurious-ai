@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 
-import { useFavorites } from "@/hooks/useFavorites";
+import { useAppStore } from "@/store/appStore";
 import type { AITool } from "@/types/ai-tool";
 
 type FavoritesClientProps = {
@@ -12,7 +13,11 @@ type FavoritesClientProps = {
 export default function FavoritesClient({
   tools,
 }: FavoritesClientProps) {
-  const { favorites } = useFavorites();
+  const { favorites, loadData } = useAppStore();
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const favoriteTools = tools.filter((tool) =>
     favorites.includes(tool.id)
@@ -69,7 +74,7 @@ export default function FavoritesClient({
                   href={`/tools/${tool.slug}`}
                   className="inline-block mt-6 bg-blue-600 px-5 py-2 rounded-lg"
                 >
-                  View Details â†’
+                  View Details →
                 </Link>
 
               </div>

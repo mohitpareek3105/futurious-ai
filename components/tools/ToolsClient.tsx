@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -113,34 +113,34 @@ export default function ToolsClient({
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => toggleFavorite(tool.id)}
-                    className="text-2xl transition hover:scale-125"
-                    title="Favorite"
-                    aria-label={`Toggle ${tool.name} favorite`}
-                  >
-                    {favorites.includes(tool.id) ? "â¤ï¸" : "ðŸ¤"}
-                  </button>
+  <button
+    type="button"
+    onClick={() => toggleFavorite(tool.id)}
+    className="text-2xl transition hover:scale-125"
+    title="Favorite"
+    aria-label={`Toggle ${tool.name} favorite`}
+  >
+    {favorites.includes(tool.id) ? "❤️" : "🤍"}
+  </button>
 
-                  <button
-                    type="button"
-                    onClick={() => toggleCompare(tool.id)}
-                    className={`rounded-lg px-3 py-1 text-sm transition ${
-                      compare.includes(tool.id)
-                        ? "bg-green-600"
-                        : "bg-gray-700 hover:bg-blue-600"
-                    }`}
-                    title="Compare"
-                    aria-label={`Toggle ${tool.name} comparison`}
-                  >
-                    âš–ï¸
-                  </button>
+  <button
+    type="button"
+    onClick={() => toggleCompare(tool.id)}
+    className={`rounded-lg px-3 py-1 text-sm transition ${
+      compare.includes(tool.id)
+        ? "bg-green-600"
+        : "bg-gray-700 hover:bg-blue-600"
+    }`}
+    title="Compare"
+    aria-label={`Toggle ${tool.name} comparison`}
+  >
+    ⚖️
+  </button>
 
-                  <span className="text-yellow-400">
-                    â­ {tool.rating}
-                  </span>
-                </div>
+  <span className="text-yellow-400">
+    ⭐ {tool.rating}
+  </span>
+</div>
               </div>
 
               <h2 className="mt-6 text-3xl font-bold">
