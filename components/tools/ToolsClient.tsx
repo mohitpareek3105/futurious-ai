@@ -73,12 +73,12 @@ export default function ToolsClient({
         </p>
 
         <input
-          type="text"
-          placeholder="ðŸ” Search AI Tools..."
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          className="mt-10 w-full rounded-xl border border-gray-700 bg-[#111827] px-6 py-4 outline-none"
-        />
+  type="search"
+  placeholder="Search AI Tools..."
+  value={search}
+  onChange={(event) => setSearch(event.target.value)}
+  className="mt-10 w-full rounded-xl border border-gray-700 bg-[#111827] px-6 py-4 text-white outline-none transition focus:border-blue-500"
+/>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           {categories.map((category) => (
