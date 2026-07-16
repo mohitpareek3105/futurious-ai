@@ -6,7 +6,18 @@ export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
 
   const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next") ?? "/";
+  const providerError =
+    requestUrl.searchParams.get("error_description") ??
+    requestUrl.searchParams.get("error");
+
+  if (providerError) {
+    return NextResponse.redirect(
+      new URL(
+        `/login?error=${encodeURIComponent(providerError)}`,
+        requestUrl.origin
+      )
+    );
+  }
 
   if (code) {
     const supabase = await createClient();
@@ -16,14 +27,19 @@ export async function GET(request: NextRequest) {
 
     if (!error) {
       return NextResponse.redirect(
-        new URL(next, requestUrl.origin)
+        new URL("/", requestUrl.origin)
       );
     }
   }
 
+  /*
+   * Supabase may already have confirmed the email even when the
+   * session exchange cannot complete, for example when the email
+   * link opens in a different browser context.
+   */
   return NextResponse.redirect(
     new URL(
-      "/login?error=Email confirmation failed or expired",
+      "/login?message=Email confirmed. Please log in to continue.",
       requestUrl.origin
     )
   );
