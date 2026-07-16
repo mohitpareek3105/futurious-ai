@@ -2,41 +2,41 @@ export const categories = [
   {
     name: "AI Assistant",
     slug: "ai-assistant",
-    icon: "🤖",
+    icon: "AI",
   },
   {
     name: "Writing",
     slug: "writing",
-    icon: "✍️",
+    icon: "WR",
   },
   {
     name: "Coding",
     slug: "coding",
-    icon: "💻",
+    icon: "CD",
   },
   {
     name: "Image Generation",
     slug: "image-generation",
-    icon: "🎨",
+    icon: "IM",
   },
   {
     name: "Video Generation",
     slug: "video-generation",
-    icon: "🎬",
+    icon: "VD",
   },
   {
     name: "Marketing",
     slug: "marketing",
-    icon: "📈",
+    icon: "MK",
   },
   {
     name: "Education",
     slug: "education",
-    icon: "🎓",
+    icon: "ED",
   },
   {
     name: "Productivity",
     slug: "productivity",
-    icon: "⚡",
+    icon: "PR",
   },
-];  
+];
