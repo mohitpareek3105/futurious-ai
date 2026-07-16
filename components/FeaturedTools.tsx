@@ -12,7 +12,7 @@ export default async function FeaturedTools() {
           Featured AI Tools
         </h2>
 
-        <p className="mt-4 mb-14 text-center text-gray-400">
+        <p className="mb-14 mt-4 text-center text-gray-400">
           Discover the world&apos;s best AI tools.
         </p>
 
@@ -28,7 +28,7 @@ export default async function FeaturedTools() {
                 </div>
 
                 <span className="text-lg font-semibold text-yellow-400">
-                  â­ {tool.rating}
+                  Rating: {tool.rating}
                 </span>
               </div>
 
@@ -36,7 +36,9 @@ export default async function FeaturedTools() {
                 {tool.name}
               </h3>
 
-              <p className="mt-2 text-gray-400">{tool.company}</p>
+              <p className="mt-2 text-gray-400">
+                {tool.company}
+              </p>
 
               <div className="mt-5 flex flex-wrap gap-2">
                 {tool.tags.map((tag) => (
@@ -62,7 +64,7 @@ export default async function FeaturedTools() {
                   href={`/tools/${tool.slug}`}
                   className="rounded-lg bg-blue-600 px-5 py-2 text-white transition hover:bg-blue-700"
                 >
-                  View Details â†’
+                  View Details
                 </Link>
               </div>
             </div>

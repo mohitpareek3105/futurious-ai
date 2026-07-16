@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { AITool } from "@/types/ai-tool";
+
+import type { AITool } from "@/types/ai-tool";
 
 interface Props {
   tools: AITool[];
@@ -12,59 +13,72 @@ export default function SearchClient({ tools }: Props) {
   const [search, setSearch] = useState("");
 
   const filteredTools = useMemo(() => {
-    return tools.filter((tool) =>
-      tool.name.toLowerCase().includes(search.toLowerCase())
-    );
+    const keyword = search.trim().toLowerCase();
+
+    return tools.filter((tool) => {
+      if (!keyword) {
+        return true;
+      }
+
+      return (
+        tool.name.toLowerCase().includes(keyword) ||
+        tool.company.toLowerCase().includes(keyword) ||
+        tool.category.toLowerCase().includes(keyword) ||
+        tool.tags.some((tag) =>
+          tag.toLowerCase().includes(keyword)
+        )
+      );
+    });
   }, [search, tools]);
 
   return (
     <section className="bg-black py-24">
-      <div className="max-w-5xl mx-auto px-6">
-        <h2 className="text-5xl font-bold text-center text-white">
+      <div className="mx-auto max-w-5xl px-6">
+        <h2 className="text-center text-5xl font-bold text-white">
           Search AI Tools
         </h2>
 
-        <p className="text-center text-gray-400 mt-4">
-          Search from thousands of AI tools
+        <p className="mt-4 text-center text-gray-400">
+          Find AI tools by name, company, category, or tag.
         </p>
 
         <input
-          type="text"
-          placeholder="ðŸ” Search AI tools..."
+          type="search"
+          placeholder="Search AI tools..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="mt-10 w-full bg-zinc-900 border border-zinc-700 rounded-xl px-6 py-5 text-xl text-white outline-none"
+          onChange={(event) => setSearch(event.target.value)}
+          className="mt-10 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl text-white outline-none transition focus:border-blue-500"
         />
 
-        <div className="grid md:grid-cols-2 gap-4 mt-10">
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
           {filteredTools.length > 0 ? (
             filteredTools.map((tool) => (
               <Link
                 key={tool.id}
                 href={`/tools/${tool.slug}`}
-                className="bg-zinc-900 border border-zinc-700 rounded-xl p-5 hover:border-blue-500 transition"
+                className="rounded-xl border border-zinc-700 bg-zinc-900 p-5 transition hover:border-blue-500"
               >
-                <h3 className="text-white text-2xl font-bold">
+                <h3 className="text-2xl font-bold text-white">
                   {tool.name}
                 </h3>
 
-                <p className="text-gray-400 mt-2">
+                <p className="mt-2 text-gray-400">
                   {tool.company}
                 </p>
 
-                <div className="flex justify-between mt-4">
+                <div className="mt-4 flex justify-between">
                   <span className="text-green-400">
                     {tool.pricing}
                   </span>
 
                   <span className="text-yellow-400">
-                    â­ {tool.rating}
+                    Rating: {tool.rating}
                   </span>
                 </div>
               </Link>
             ))
           ) : (
-            <p className="text-center text-red-400 col-span-2">
+            <p className="col-span-2 text-center text-red-400">
               No AI tools found.
             </p>
           )}

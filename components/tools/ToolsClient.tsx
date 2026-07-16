@@ -175,7 +175,7 @@ export default function ToolsClient({
                   href={`/tools/${tool.slug}`}
                   className="rounded-lg bg-blue-600 px-5 py-2 hover:bg-blue-700"
                 >
-                  View Details â†’
+                  View Details →
                 </Link>
               </div>
             </div>
