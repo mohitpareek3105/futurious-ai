@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
@@ -108,9 +108,21 @@ export default function ToolsClient({
               className="rounded-2xl border border-gray-800 bg-[#111827] p-6 transition duration-300 hover:-translate-y-2 hover:border-blue-500"
             >
               <div className="flex items-start justify-between">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white text-2xl font-bold text-black">
-                  {tool.name.charAt(0)}
-                </div>
+                <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-white p-2">
+  {tool.logo ? (
+    <Image
+      src={tool.logo}
+      alt={`${tool.name} logo`}
+      width={40}
+      height={40}
+      className="h-10 w-10 object-contain"
+    />
+  ) : (
+    <span className="text-2xl font-bold text-black">
+      {tool.name.charAt(0)}
+    </span>
+  )}
+</div>
 
                 <div className="flex items-center gap-3">
   <button
