@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
+import { siteConfig } from "@/lib/site-config";
 
 import "./globals.css";
 
@@ -17,8 +18,51 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Futurious.AI",
-  description: "Discover the world's best AI tools and prompts.",
+  metadataBase: new URL(siteConfig.url),
+
+  applicationName: siteConfig.name,
+
+  title: {
+    default: `${siteConfig.name} — Discover the Best AI Tools`,
+    template: `%s | ${siteConfig.name}`,
+  },
+
+  description: siteConfig.description,
+
+  keywords: [...siteConfig.keywords],
+
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    type: "website",
+    locale: siteConfig.locale,
+    url: "/",
+    siteName: siteConfig.name,
+    title: `${siteConfig.name} — Discover the Best AI Tools`,
+    description: siteConfig.description,
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} — Discover the Best AI Tools`,
+    description: siteConfig.description,
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+
+  category: "technology",
 };
 
 export default async function RootLayout({
