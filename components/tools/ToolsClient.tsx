@@ -173,7 +173,9 @@ export default function ToolsClient({
                   <div className="flex min-w-0 items-center gap-4">
                     <ToolLogo
   name={tool.name}
+  slug={tool.slug}
   logo={tool.logo}
+  website={tool.website}
 />
 
                     <div className="min-w-0">
