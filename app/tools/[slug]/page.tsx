@@ -1,16 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getToolBySlug } from "@/lib/tools";
-
-import ToolHeader from "@/components/tool/ToolHeader";
-import ToolQuickInfo from "@/components/tool/ToolQuickInfo";
+import SimilarTools from "@/components/tool/SimilarTools";
 import ToolFeatures from "@/components/tool/ToolFeatures";
-import ToolUseCases from "@/components/tool/ToolUseCases";
+import ToolHeader from "@/components/tool/ToolHeader";
 import ToolIntegrations from "@/components/tool/ToolIntegrations";
 import ToolLanguages from "@/components/tool/ToolLanguages";
 import ToolProsCons from "@/components/tool/ToolProsCons";
-import SimilarTools from "@/components/tool/SimilarTools";
+import ToolQuickInfo from "@/components/tool/ToolQuickInfo";
+import ToolUseCases from "@/components/tool/ToolUseCases";
+
+import { siteConfig } from "@/lib/site-config";
+import { getToolBySlug } from "@/lib/tools";
 
 type Props = {
   params: Promise<{
@@ -18,9 +20,108 @@ type Props = {
   }>;
 };
 
-export default async function ToolPage({ params }: Props) {
-  const { slug } = await params;
+function createToolDescription(
+  toolName: string,
+  description: string,
+  pricing: string,
+) {
+  const fallbackDescription =
+    `Explore ${toolName}, including its features, pricing, pros, cons, ` +
+    "use cases and similar AI tools.";
 
+  const sourceDescription =
+    description?.replace(/\s+/g, " ").trim() ||
+    fallbackDescription;
+
+  const completeDescription =
+    `${sourceDescription} Pricing: ${
+      pricing || "See official website"
+    }.`;
+
+  return completeDescription.length > 160
+    ? `${completeDescription.slice(0, 157).trimEnd()}...`
+    : completeDescription;
+}
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const tool = await getToolBySlug(slug);
+
+  if (!tool) {
+    return {
+      title: "AI Tool Not Found",
+      description:
+        "The requested AI tool could not be found on FuturiousAI.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  const title =
+    `${tool.name} Review: Features, Pricing, Pros & Cons`;
+
+  const description = createToolDescription(
+    tool.name,
+    tool.description,
+    tool.pricing,
+  );
+
+  const canonicalPath = `/tools/${tool.slug}`;
+
+  return {
+    title,
+    description,
+
+    alternates: {
+      canonical: canonicalPath,
+    },
+
+    openGraph: {
+      type: "article",
+      url: canonicalPath,
+      siteName: siteConfig.name,
+      title,
+      description,
+      images: tool.coverImage
+        ? [
+            {
+              url: tool.coverImage,
+              alt: `${tool.name} AI tool review`,
+            },
+          ]
+        : undefined,
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: tool.coverImage
+        ? [tool.coverImage]
+        : undefined,
+    },
+
+    keywords: [
+      tool.name,
+      `${tool.name} review`,
+      `${tool.name} pricing`,
+      `${tool.name} alternatives`,
+      `${tool.name} features`,
+      "AI tools",
+      tool.category,
+      ...tool.tags,
+    ],
+  };
+}
+
+export default async function ToolPage({
+  params,
+}: Props) {
+  const { slug } = await params;
   const tool = await getToolBySlug(slug);
 
   if (!tool) {
@@ -32,9 +133,9 @@ export default async function ToolPage({ params }: Props) {
       <div className="mx-auto mt-16 max-w-6xl">
         <Link
           href="/tools"
-          className="text-blue-400 hover:text-blue-300"
+          className="text-blue-400 transition hover:text-blue-300"
         >
-          ← Back to All Tools
+          &larr; Back to All Tools
         </Link>
 
         <ToolHeader tool={tool} />
@@ -46,7 +147,7 @@ export default async function ToolPage({ params }: Props) {
           rating={tool.rating}
         />
 
-        <div className="mt-12">
+        <section className="mt-12">
           <h2 className="text-3xl font-bold">
             Description
           </h2>
@@ -54,7 +155,7 @@ export default async function ToolPage({ params }: Props) {
           <p className="mt-5 text-lg leading-8 text-gray-300">
             {tool.description}
           </p>
-        </div>
+        </section>
 
         <ToolFeatures features={tool.features} />
 
@@ -74,22 +175,24 @@ export default async function ToolPage({ params }: Props) {
 
         <SimilarTools currentTool={tool} />
 
-        <div className="mt-16">
-          <h2 className="mb-6 text-3xl font-bold">
-            Tags
-          </h2>
+        {tool.tags.length > 0 && (
+          <section className="mt-16">
+            <h2 className="mb-6 text-3xl font-bold">
+              Tags
+            </h2>
 
-          <div className="flex flex-wrap gap-3">
-            {tool.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-blue-600 bg-blue-900/40 px-4 py-2"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
+            <div className="flex flex-wrap gap-3">
+              {tool.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-blue-600 bg-blue-900/40 px-4 py-2"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
 
         <a
           href={tool.website}
@@ -97,7 +200,7 @@ export default async function ToolPage({ params }: Props) {
           rel="noopener noreferrer"
           className="mt-16 inline-block rounded-xl bg-blue-600 px-8 py-4 font-semibold transition hover:bg-blue-700"
         >
-          Visit Official Website →
+          Visit Official Website &rarr;
         </a>
       </div>
     </main>

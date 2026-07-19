@@ -1,42 +1,53 @@
+import {
+  Bot,
+  PenSquare,
+  Code2,
+  ImageIcon,
+  Video,
+  Megaphone,
+  GraduationCap,
+  Briefcase,
+} from "lucide-react";
+
 export const categories = [
   {
     name: "AI Assistant",
     slug: "ai-assistant",
-    icon: "AI",
+    icon: Bot,
   },
   {
     name: "Writing",
     slug: "writing",
-    icon: "WR",
+    icon: PenSquare,
   },
   {
     name: "Coding",
     slug: "coding",
-    icon: "CD",
+    icon: Code2,
   },
   {
     name: "Image Generation",
     slug: "image-generation",
-    icon: "IM",
+    icon: ImageIcon,
   },
   {
     name: "Video Generation",
     slug: "video-generation",
-    icon: "VD",
+    icon: Video,
   },
   {
     name: "Marketing",
     slug: "marketing",
-    icon: "MK",
+    icon: Megaphone,
   },
   {
     name: "Education",
     slug: "education",
-    icon: "ED",
+    icon: GraduationCap,
   },
   {
     name: "Productivity",
     slug: "productivity",
-    icon: "PR",
+    icon: Briefcase,
   },
 ];
