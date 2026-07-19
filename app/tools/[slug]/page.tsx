@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -53,7 +53,7 @@ export async function generateMetadata({
     return {
       title: "AI Tool Not Found",
       description:
-        "The requested AI tool could not be found on FuturiousAI.",
+        "The requested AI tool could not be found on Futurious.AI.",
       robots: {
         index: false,
         follow: false,

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import CategoryCard from "@/components/category/CategoryCard";
 import { categories } from "@/data/categories";
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     canonical: "/categories",
   },
   openGraph: {
-    title: "AI Tool Categories | FuturiousAI",
+    title: "AI Tool Categories | Futurious.AI",
     description:
       "Explore curated AI tools across writing, coding, productivity, marketing and more.",
     url: "/categories",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Tool Categories | FuturiousAI",
+    title: "AI Tool Categories | Futurious.AI",
     description:
       "Browse curated AI tools by category and find the right tool for your workflow.",
   },

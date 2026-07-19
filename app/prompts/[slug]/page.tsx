@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -20,7 +20,7 @@ function createPromptDescription(
 ) {
   const fallback =
     `Use this ${title} AI prompt to generate better, clearer and more useful results. ` +
-    `Copy and customize it from the FuturiousAI prompt library.`;
+    `Copy and customize it from the Futurious.AI prompt library.`;
 
   const sourceDescription =
     description?.replace(/\s+/g, " ").trim() || fallback;
@@ -43,7 +43,7 @@ export async function generateMetadata({
     return {
       title: "AI Prompt Not Found",
       description:
-        "The requested AI prompt could not be found in the FuturiousAI prompt library.",
+        "The requested AI prompt could not be found in the Futurious.AI prompt library.",
       robots: {
         index: false,
         follow: false,
@@ -51,7 +51,7 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${prompt.title} — AI Prompt Template`;
+  const title = `${prompt.title} â€” AI Prompt Template`;
 
   const description = createPromptDescription(
     prompt.title,
@@ -90,7 +90,7 @@ export async function generateMetadata({
       "ChatGPT prompts",
       "prompt library",
       "artificial intelligence prompts",
-      "FuturiousAI",
+      "Futurious.AI",
     ],
   };
 }

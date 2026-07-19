@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -24,7 +24,7 @@ function createMetaDescription(
     .trim();
 
   const fallback =
-    `Read ${title} on FuturiousAI and discover practical insights, ` +
+    `Read ${title} on Futurious.AI and discover practical insights, ` +
     `guides and updates about artificial intelligence and AI tools.`;
 
   const description = plainText || fallback;
@@ -47,7 +47,7 @@ export async function generateMetadata({
     return {
       title: "Blog Post Not Found",
       description:
-        "The requested blog post could not be found on FuturiousAI.",
+        "The requested blog post could not be found on Futurious.AI.",
       robots: {
         index: false,
         follow: false,
@@ -95,7 +95,7 @@ export async function generateMetadata({
       "AI blog",
       "artificial intelligence",
       "AI tools",
-      "FuturiousAI",
+      "Futurious.AI",
     ],
   };
 }
@@ -120,7 +120,7 @@ export default async function BlogDetail({
           href="/blog"
           className="text-blue-400 hover:text-blue-300"
         >
-          ← Back to Blog
+          â† Back to Blog
         </Link>
 
         <h1 className="mt-10 text-5xl font-bold">

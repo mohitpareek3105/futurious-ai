@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { BookOpen, Copy, Search, Sparkles } from "lucide-react";
 
 import PromptLibraryClient from "@/components/prompt/PromptLibraryClient";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     canonical: "/prompts",
   },
   openGraph: {
-    title: "AI Prompt Library | FuturiousAI",
+    title: "AI Prompt Library | Futurious.AI",
     description:
       "Browse practical AI prompts for writing, coding, marketing, productivity and more.",
     url: "/prompts",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Prompt Library | FuturiousAI",
+    title: "AI Prompt Library | Futurious.AI",
     description:
       "Explore ready-to-use AI prompts designed to improve your workflow.",
   },

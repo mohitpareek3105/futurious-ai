@@ -25,7 +25,7 @@ export async function generateMetadata({
     return {
       title: "AI Tool Category Not Found",
       description:
-        "The requested AI tool category could not be found on FuturiousAI.",
+        "The requested AI tool category could not be found on Futurious.AI.",
       robots: {
         index: false,
         follow: false,
@@ -36,7 +36,7 @@ export async function generateMetadata({
   const title = `Best ${category.name} AI Tools`;
 
   const description =
-    `Discover the best ${category.name} AI tools on FuturiousAI. ` +
+    `Discover the best ${category.name} AI tools on Futurious.AI. ` +
     `Compare features, pricing, ratings, use cases and alternatives to find the right AI tool.`;
 
   const canonicalPath = `/categories/${category.slug}`;
@@ -71,7 +71,7 @@ export async function generateMetadata({
       "AI tools",
       "artificial intelligence tools",
       "AI tool directory",
-      "FuturiousAI",
+      "Futurious.AI",
     ],
   };
 }
