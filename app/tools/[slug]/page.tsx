@@ -43,6 +43,10 @@ function createToolDescription(
     : completeDescription;
 }
 
+function serializeJsonLd(data: unknown) {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
 export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
@@ -127,8 +131,98 @@ export default async function ToolPage({
   if (!tool) {
     notFound();
   }
+const pageUrl = `${siteConfig.url}/tools/${tool.slug}`;
+
+  const softwareApplicationSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${pageUrl}#software-application`,
+    name: tool.name,
+    description: tool.description,
+    url: pageUrl,
+    sameAs: tool.website,
+    applicationCategory:
+      tool.category || "BusinessApplication",
+    operatingSystem:
+      tool.platforms.length > 0
+        ? tool.platforms.join(", ")
+        : "Web",
+    ...(tool.coverImage
+      ? {
+          image: tool.coverImage,
+        }
+      : {}),
+    ...(tool.company
+      ? {
+          creator: {
+            "@type": "Organization",
+            name: tool.company,
+          },
+        }
+      : {}),
+    ...(tool.features.length > 0
+      ? {
+          featureList: tool.features,
+        }
+      : {}),
+    ...(tool.languages.length > 0
+      ? {
+          inLanguage: tool.languages,
+        }
+      : {}),
+    keywords: [
+      tool.name,
+      tool.category,
+      ...tool.tags,
+    ]
+      .filter(Boolean)
+      .join(", "),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${pageUrl}#breadcrumb`,
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "AI Tools",
+        item: `${siteConfig.url}/tools`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: tool.name,
+        item: pageUrl,
+      },
+    ],
+  };
 
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(
+            softwareApplicationSchema,
+          ),
+        }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(breadcrumbSchema),
+        }}
+      />
+
     <main className="min-h-screen bg-[#050505] px-6 py-16 text-white">
       <div className="mx-auto mt-16 max-w-6xl">
         <Link
@@ -203,6 +297,7 @@ export default async function ToolPage({
           Visit Official Website &rarr;
         </a>
       </div>
-    </main>
+          </main>
+    </>
   );
 }
