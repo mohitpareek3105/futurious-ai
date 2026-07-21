@@ -17,6 +17,47 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const organizationId = `${siteConfig.url}/#organization`;
+const websiteId = `${siteConfig.url}/#website`;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": organizationId,
+      name: siteConfig.name,
+      alternateName: siteConfig.shortName,
+      url: siteConfig.url,
+    },
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: siteConfig.url,
+      name: siteConfig.name,
+      alternateName: siteConfig.shortName,
+      description: siteConfig.description,
+      inLanguage: "en",
+      publisher: {
+        "@id": organizationId,
+      },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${siteConfig.url}/tools?search={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+};
+
+const serializedStructuredData = JSON.stringify(structuredData).replace(
+  /</g,
+  "\\u003c"
+);
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
 
@@ -82,6 +123,13 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[#050505] text-white">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: serializedStructuredData,
+          }}
+        />
+
         <Navbar userEmail={user?.email ?? null} />
 
         <main>{children}</main>
