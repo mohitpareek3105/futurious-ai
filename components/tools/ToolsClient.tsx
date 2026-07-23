@@ -1,6 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import {
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import ToolLogo from "@/components/ui/ToolLogo";
@@ -56,7 +61,11 @@ export default function ToolsClient({
   const [selectedCategory, setSelectedCategory] =
     useState(initialCategory);
 
-  const [search, setSearch] = useState(initialSearch);
+    const [search, setSearch] = useState(initialSearch);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const {
     favorites,
@@ -71,8 +80,31 @@ export default function ToolsClient({
   }, [tools]);
 
   useEffect(() => {
+    setSelectedCategory(initialCategory);
+  }, [initialCategory]);
+
+  useEffect(() => {
     loadData();
   }, [loadData]);
+
+  function handleCategoryChange(category: string) {
+    setSelectedCategory(category);
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (category === "All") {
+      params.delete("category");
+    } else {
+      params.set("category", category);
+    }
+
+    const queryString = params.toString();
+
+    router.push(
+      queryString ? `${pathname}?${queryString}` : pathname,
+      { scroll: false }
+    );
+  }
 
   const filteredTools = useMemo(() => {
     const keyword = search.trim().toLowerCase();
@@ -139,7 +171,7 @@ export default function ToolsClient({
               <button
                 key={category}
                 type="button"
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => handleCategoryChange(category)}
                 className={`rounded-full border px-5 py-2 text-sm font-medium transition ${
                   isSelected
                     ? "border-blue-500 bg-blue-600 text-white shadow-lg shadow-blue-600/20"
