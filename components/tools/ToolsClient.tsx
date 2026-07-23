@@ -61,7 +61,7 @@ export default function ToolsClient({
   const [selectedCategory, setSelectedCategory] =
     useState(initialCategory);
 
-    const [search, setSearch] = useState(initialSearch);
+      const [search, setSearch] = useState(initialSearch);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -82,6 +82,37 @@ export default function ToolsClient({
   useEffect(() => {
     setSelectedCategory(initialCategory);
   }, [initialCategory]);
+
+    useEffect(() => {
+    setSearch(initialSearch);
+  }, [initialSearch]);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      const trimmedSearch = search.trim();
+
+      if (trimmedSearch) {
+        params.set("search", trimmedSearch);
+      } else {
+        params.delete("search");
+      }
+
+      const queryString = params.toString();
+      const currentQueryString = searchParams.toString();
+
+      if (queryString === currentQueryString) {
+        return;
+      }
+
+      router.replace(
+        queryString ? `${pathname}?${queryString}` : pathname,
+        { scroll: false }
+      );
+    }, 300);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [pathname, router, search, searchParams]);
 
   useEffect(() => {
     loadData();
