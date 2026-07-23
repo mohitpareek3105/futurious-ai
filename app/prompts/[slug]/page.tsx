@@ -1,12 +1,11 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
-import { prompts } from "@/data/prompts";
-import { siteConfig } from "@/lib/site-config";
 import { ArrowLeft } from "lucide-react";
 
 import PromptDetail from "@/components/prompt/PromptDetail";
+import { prompts } from "@/data/prompts";
+import { siteConfig } from "@/lib/site-config";
 
 type Props = {
   params: Promise<{
@@ -51,7 +50,7 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${prompt.title} â€” AI Prompt Template`;
+  const title = `${prompt.title} — AI Prompt Template`;
 
   const description = createPromptDescription(
     prompt.title,
@@ -108,23 +107,61 @@ export default async function PromptPage({
     notFound();
   }
 
-  return (
-    <main className="min-h-screen bg-[#050505] px-6 py-16 text-white">
-      <div className="mx-auto mt-16 max-w-5xl">
-        <Link
-  href="/prompts"
-  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-300 transition hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-white"
->
-  <ArrowLeft className="h-4 w-4" />
-  Back to Prompt Library
-</Link>
+  const breadcrumbStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Prompt Library",
+        item: `${siteConfig.url}/prompts`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: prompt.title,
+        item: `${siteConfig.url}/prompts/${prompt.slug}`,
+      },
+    ],
+  };
 
-        <PromptDetail
-          title={prompt.title}
-          description={prompt.description}
-          prompt={prompt.prompt}
-        />
-      </div>
-    </main>
+  const serializedBreadcrumbStructuredData = JSON.stringify(
+    breadcrumbStructuredData,
+  ).replace(/</g, "\\u003c");
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializedBreadcrumbStructuredData,
+        }}
+      />
+
+      <main className="min-h-screen bg-[#050505] px-6 py-16 text-white">
+        <div className="mx-auto mt-16 max-w-5xl">
+          <Link
+            href="/prompts"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-300 transition hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Prompt Library
+          </Link>
+
+          <PromptDetail
+            title={prompt.title}
+            description={prompt.description}
+            prompt={prompt.prompt}
+          />
+        </div>
+      </main>
+    </>
   );
 }
