@@ -131,7 +131,13 @@ export default async function ToolPage({
   if (!tool) {
     notFound();
   }
-const pageUrl = `${siteConfig.url}/tools/${tool.slug}`;
+  const pageUrl = `${siteConfig.url}/tools/${tool.slug}`;
+
+  const coverImageUrl = tool.coverImage
+    ? tool.coverImage.startsWith("http")
+      ? tool.coverImage
+      : `${siteConfig.url}${tool.coverImage}`
+    : null;
 
   const softwareApplicationSchema = {
     "@context": "https://schema.org",
@@ -147,9 +153,9 @@ const pageUrl = `${siteConfig.url}/tools/${tool.slug}`;
       tool.platforms.length > 0
         ? tool.platforms.join(", ")
         : "Web",
-    ...(tool.coverImage
+        ...(coverImageUrl
       ? {
-          image: tool.coverImage,
+          image: coverImageUrl,
         }
       : {}),
     ...(tool.company
@@ -223,7 +229,7 @@ const pageUrl = `${siteConfig.url}/tools/${tool.slug}`;
         }}
       />
 
-    <main className="min-h-screen bg-[#050505] px-6 py-16 text-white">
+          <main className="min-h-screen bg-[#050505] px-6 py-16 text-white">
       <div className="mx-auto mt-16 max-w-6xl">
         <Link
           href="/tools"
@@ -296,8 +302,8 @@ const pageUrl = `${siteConfig.url}/tools/${tool.slug}`;
         >
           Visit Official Website &rarr;
         </a>
-      </div>
-          </main>
+              </div>
+      </main>
     </>
   );
 }
