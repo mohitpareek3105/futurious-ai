@@ -2,12 +2,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { blogs } from "@/data/blogs";
-import { siteConfig } from "@/lib/site-config";
-
 import BlogMeta from "@/components/blog/BlogMeta";
 import BlogTags from "@/components/blog/BlogTags";
 import ShareButtons from "@/components/blog/ShareButtons";
+import { blogs } from "@/data/blogs";
+import { siteConfig } from "@/lib/site-config";
 
 type Props = {
   params: Promise<{
@@ -32,6 +31,18 @@ function createMetaDescription(
   return description.length > 160
     ? `${description.slice(0, 157).trimEnd()}...`
     : description;
+}
+
+function formatPublishedDateForSchema(
+  publishedAt: string,
+) {
+  const parsedDate = new Date(publishedAt);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return publishedAt;
+  }
+
+  return parsedDate.toISOString().split("T")[0];
 }
 
 export async function generateMetadata({
@@ -78,15 +89,24 @@ export async function generateMetadata({
       siteName: siteConfig.name,
       title,
       description,
-      publishedTime: blog.publishedAt,
+      publishedTime: formatPublishedDateForSchema(
+        blog.publishedAt,
+      ),
       authors: [blog.author],
       tags: blog.tags,
+      images: [
+        {
+          url: blog.coverImage,
+          alt: blog.title,
+        },
+      ],
     },
 
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [blog.coverImage],
     },
 
     keywords: [
@@ -113,6 +133,17 @@ export default async function BlogDetail({
     notFound();
   }
 
+  const canonicalUrl =
+    `${siteConfig.url}/blog/${blog.slug}`;
+
+  const description = createMetaDescription(
+    blog.title,
+    blog.content,
+  );
+
+  const publishedDate =
+    formatPublishedDateForSchema(blog.publishedAt);
+
   const breadcrumbStructuredData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -133,21 +164,61 @@ export default async function BlogDetail({
         "@type": "ListItem",
         position: 3,
         name: blog.title,
-        item: `${siteConfig.url}/blog/${blog.slug}`,
+        item: canonicalUrl,
       },
     ],
   };
 
-  const serializedBreadcrumbStructuredData = JSON.stringify(
-    breadcrumbStructuredData,
-  ).replace(/</g, "\\u003c");
+  const blogPostingStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: blog.title,
+    description,
+    image: `${siteConfig.url}${blog.coverImage}`,
+    datePublished: publishedDate,
+    author: {
+      "@type": "Person",
+      name: blog.author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
+    articleSection: blog.category,
+    keywords: blog.tags.join(", "),
+    url: canonicalUrl,
+  };
+
+  const serializedBreadcrumbStructuredData =
+    JSON.stringify(
+      breadcrumbStructuredData,
+    ).replace(/</g, "\\u003c");
+
+  const serializedBlogPostingStructuredData =
+    JSON.stringify(
+      blogPostingStructuredData,
+    ).replace(/</g, "\\u003c");
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: serializedBreadcrumbStructuredData,
+          __html:
+            serializedBreadcrumbStructuredData,
+        }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            serializedBlogPostingStructuredData,
         }}
       />
 
