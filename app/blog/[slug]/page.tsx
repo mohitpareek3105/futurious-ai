@@ -113,36 +113,74 @@ export default async function BlogDetail({
     notFound();
   }
 
+  const breadcrumbStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: `${siteConfig.url}/blog`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: blog.title,
+        item: `${siteConfig.url}/blog/${blog.slug}`,
+      },
+    ],
+  };
+
+  const serializedBreadcrumbStructuredData = JSON.stringify(
+    breadcrumbStructuredData,
+  ).replace(/</g, "\\u003c");
+
   return (
-    <main className="min-h-screen bg-[#050505] px-6 py-16 text-white">
-      <article className="mx-auto mt-16 max-w-4xl">
-        <Link
-          href="/blog"
-          className="text-blue-400 hover:text-blue-300"
-        >
-          â† Back to Blog
-        </Link>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializedBreadcrumbStructuredData,
+        }}
+      />
 
-        <h1 className="mt-10 text-5xl font-bold">
-          {blog.title}
-        </h1>
+      <main className="min-h-screen bg-[#050505] px-6 py-16 text-white">
+        <article className="mx-auto mt-16 max-w-4xl">
+          <Link
+            href="/blog"
+            className="text-blue-400 hover:text-blue-300"
+          >
+            ← Back to Blog
+          </Link>
 
-        <BlogMeta
-          author={blog.author}
-          publishedAt={blog.publishedAt}
-          readingTime={blog.readingTime}
-        />
+          <h1 className="mt-10 text-5xl font-bold">
+            {blog.title}
+          </h1>
 
-        <div className="mt-12">
-          <pre className="whitespace-pre-wrap font-sans text-lg leading-8 text-gray-300">
-            {blog.content}
-          </pre>
-        </div>
+          <BlogMeta
+            author={blog.author}
+            publishedAt={blog.publishedAt}
+            readingTime={blog.readingTime}
+          />
 
-        <BlogTags tags={blog.tags} />
+          <div className="mt-12">
+            <pre className="whitespace-pre-wrap font-sans text-lg leading-8 text-gray-300">
+              {blog.content}
+            </pre>
+          </div>
 
-        <ShareButtons title={blog.title} />
-      </article>
-    </main>
+          <BlogTags tags={blog.tags} />
+
+          <ShareButtons title={blog.title} />
+        </article>
+      </main>
+    </>
   );
 }
