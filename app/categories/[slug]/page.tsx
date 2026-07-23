@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import ToolsClient from "@/components/tools/ToolsClient";
@@ -91,5 +91,45 @@ export default async function CategoryPage({
 
   const tools = await getToolsByCategorySlug(slug);
 
-  return <ToolsClient tools={tools} />;
+  const breadcrumbStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Categories",
+        item: `${siteConfig.url}/categories`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: category.name,
+        item: `${siteConfig.url}/categories/${category.slug}`,
+      },
+    ],
+  };
+
+  const serializedBreadcrumbStructuredData = JSON.stringify(
+    breadcrumbStructuredData,
+  ).replace(/</g, "\\u003c");
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializedBreadcrumbStructuredData,
+        }}
+      />
+
+      <ToolsClient tools={tools} />
+    </>
+  );
 }
