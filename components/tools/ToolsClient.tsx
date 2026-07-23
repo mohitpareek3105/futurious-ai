@@ -1,6 +1,5 @@
 "use client";
 
-
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -11,6 +10,7 @@ import type { AITool } from "@/types/ai-tool";
 type ToolsClientProps = {
   tools: AITool[];
   initialSearch?: string;
+  initialCategory?: string;
 };
 
 function HeartIcon({ filled }: { filled: boolean }) {
@@ -35,11 +35,7 @@ function HeartIcon({ filled }: { filled: boolean }) {
 
 function CompareIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="h-5 w-5"
-    >
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
       <path
         fill="none"
         stroke="currentColor"
@@ -55,9 +51,11 @@ function CompareIcon() {
 export default function ToolsClient({
   tools,
   initialSearch = "",
+  initialCategory = "All",
 }: ToolsClientProps) {
   const [selectedCategory, setSelectedCategory] =
-    useState("All");
+    useState(initialCategory);
+
   const [search, setSearch] = useState(initialSearch);
 
   const {
@@ -69,10 +67,7 @@ export default function ToolsClient({
   } = useAppStore();
 
   const categories = useMemo(() => {
-    return [
-      "All",
-      ...new Set(tools.map((tool) => tool.category)),
-    ];
+    return ["All", ...new Set(tools.map((tool) => tool.category))];
   }, [tools]);
 
   useEffect(() => {
@@ -174,11 +169,11 @@ export default function ToolsClient({
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex min-w-0 items-center gap-4">
                     <ToolLogo
-  name={tool.name}
-  slug={tool.slug}
-  logo={tool.logo}
-  website={tool.website}
-/>
+                      name={tool.name}
+                      slug={tool.slug}
+                      logo={tool.logo}
+                      website={tool.website}
+                    />
 
                     <div className="min-w-0">
                       <h2 className="truncate text-xl font-semibold text-white">
@@ -293,6 +288,7 @@ export default function ToolsClient({
             <h2 className="text-xl font-semibold">
               No AI tools found
             </h2>
+
             <p className="mt-2 text-gray-400">
               Try a different search keyword or category.
             </p>
