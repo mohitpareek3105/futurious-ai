@@ -1,8 +1,23 @@
 import ToolsClient from "@/components/tools/ToolsClient";
 import { getAllTools } from "@/lib/tools";
 
-export default async function ToolsPage() {
+type ToolsPageProps = {
+  searchParams: Promise<{
+    search?: string;
+  }>;
+};
+
+export default async function ToolsPage({
+  searchParams,
+}: ToolsPageProps) {
   const tools = await getAllTools();
 
-  return <ToolsClient tools={tools} />;
+  const { search = "" } = await searchParams;
+
+  return (
+    <ToolsClient
+      tools={tools}
+      initialSearch={search}
+    />
+  );
 }

@@ -10,6 +10,7 @@ import type { AITool } from "@/types/ai-tool";
 
 type ToolsClientProps = {
   tools: AITool[];
+  initialSearch?: string;
 };
 
 function HeartIcon({ filled }: { filled: boolean }) {
@@ -53,10 +54,11 @@ function CompareIcon() {
 
 export default function ToolsClient({
   tools,
+  initialSearch = "",
 }: ToolsClientProps) {
   const [selectedCategory, setSelectedCategory] =
     useState("All");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
 
   const {
     favorites,
