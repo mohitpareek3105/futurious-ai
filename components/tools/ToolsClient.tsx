@@ -18,7 +18,9 @@ type ToolsClientProps = {
   initialCategory?: string;
   initialPricing?: string;
   initialSort?: string;
+  initialPage?: number;
 };
+const TOOLS_PER_PAGE = 24;
 
 function HeartIcon({ filled }: { filled: boolean }) {
   return (
@@ -61,6 +63,7 @@ export default function ToolsClient({
   initialCategory = "All",
   initialPricing = "All",
   initialSort = "default",
+initialPage = 1,
 }: ToolsClientProps) {
   const [selectedCategory, setSelectedCategory] =
   useState(initialCategory);
@@ -72,6 +75,9 @@ const [selectedPricing, setSelectedPricing] =
 
   const [selectedSort, setSelectedSort] =
   useState(initialSort);
+
+const [selectedPage, setSelectedPage] =
+  useState(initialPage);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -98,13 +104,20 @@ const sortOptions = [
   { value: "rating", label: "Top Rated" },
   { value: "newest", label: "Newest" },
   { value: "popular", label: "Most Popular" },
-  { value: "name", label: "A–Z" },
+  { value: "name", label: "A-Z" },
 ];
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
       const trimmedSearch = search.trim();
+
+      const initialTrimmedSearch = initialSearch.trim();
+
+if (trimmedSearch !== initialTrimmedSearch) {
+  params.delete("page");
+  setSelectedPage(1);
+}
 
       if (trimmedSearch) {
         params.set("search", trimmedSearch);
@@ -125,16 +138,22 @@ const sortOptions = [
       );
     }, 300);
 
-    return () => window.clearTimeout(timeoutId);
-  }, [pathname, router, search, searchParams]);
+        return () => window.clearTimeout(timeoutId);
+  }, [
+    initialSearch,
+    pathname,
+    router,
+    search,
+    searchParams,
+  ]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
-useEffect(() => {
-  setSelectedCategory(initialCategory);
-}, [initialCategory]);
+  useEffect(() => {
+    setSelectedCategory(initialCategory);
+  }, [initialCategory]);
 
 useEffect(() => {
   setSelectedPricing(initialPricing);
@@ -144,10 +163,17 @@ useEffect(() => {
   setSelectedSort(initialSort);
 }, [initialSort]);
 
+useEffect(() => {
+  setSelectedPage(initialPage);
+}, [initialPage]);
+
   function handleCategoryChange(category: string) {
     setSelectedCategory(category);
+    setSelectedPage(1);
 
     const params = new URLSearchParams(searchParams.toString());
+
+    params.delete("page");
 
     if (category === "All") {
       params.delete("category");
@@ -165,6 +191,7 @@ useEffect(() => {
 
   function handlePricingChange(pricing: string) {
   setSelectedPricing(pricing);
+  setSelectedPage(1);
 
   const params = new URLSearchParams(searchParams.toString());
 
@@ -184,8 +211,11 @@ useEffect(() => {
 
 function handleSortChange(sort: string) {
   setSelectedSort(sort);
+  setSelectedPage(1);
 
   const params = new URLSearchParams(searchParams.toString());
+
+  params.delete("page");
 
   if (sort === "default") {
     params.delete("sort");
@@ -257,6 +287,54 @@ function handleSortChange(sort: string) {
   selectedSort,
   tools,
 ]);
+
+const totalPages = Math.max(
+  1,
+  Math.ceil(filteredTools.length / TOOLS_PER_PAGE)
+);
+
+const currentPage = Math.min(
+  selectedPage,
+  totalPages
+);
+
+const firstToolIndex =
+  (currentPage - 1) * TOOLS_PER_PAGE;
+
+const paginatedTools = filteredTools.slice(
+  firstToolIndex,
+  firstToolIndex + TOOLS_PER_PAGE
+);
+
+function handlePageChange(page: number) {
+  if (
+    page < 1 ||
+    page > totalPages ||
+    page === currentPage
+  ) {
+    return;
+  }
+
+  setSelectedPage(page);
+
+  const params = new URLSearchParams(
+    searchParams.toString()
+  );
+
+  if (page === 1) {
+    params.delete("page");
+  } else {
+    params.set("page", String(page));
+  }
+
+  const queryString = params.toString();
+
+  router.push(
+    queryString
+      ? `${pathname}?${queryString}`
+      : pathname
+  );
+}
 
   return (
     <main className="min-h-screen bg-[#050505] px-4 py-16 text-white sm:px-6">
@@ -368,11 +446,16 @@ function handleSortChange(sort: string) {
 </div>
 
         <p className="mb-8 mt-8 text-center text-sm text-gray-400">
-          Showing {filteredTools.length} of {tools.length} tools
-        </p>
+  {filteredTools.length > 0
+    ? `Showing ${firstToolIndex + 1}-${Math.min(
+        firstToolIndex + TOOLS_PER_PAGE,
+        filteredTools.length
+      )} of ${filteredTools.length} matching tools`
+    : "Showing 0 matching tools"}
+</p>
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {filteredTools.map((tool) => {
+          {paginatedTools.map((tool) => {
             const isFavorite = favorites.includes(tool.id);
             const isCompared = compare.includes(tool.id);
 
@@ -497,6 +580,35 @@ function handleSortChange(sort: string) {
             );
           })}
         </div>
+
+        {filteredTools.length > 0 && totalPages > 1 && (
+          <nav
+            aria-label="Tools pagination"
+            className="mt-10 flex items-center justify-center gap-4"
+          >
+            <button
+              type="button"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-gray-200 transition hover:border-blue-500/40 hover:bg-blue-500/10 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Previous
+            </button>
+
+            <span className="text-sm text-gray-400">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              type="button"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-gray-200 transition hover:border-blue-500/40 hover:bg-blue-500/10 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Next
+            </button>
+          </nav>
+        )}
 
         {filteredTools.length === 0 && (
           <div className="mt-12 rounded-2xl border border-white/10 bg-white/5 px-6 py-12 text-center">
