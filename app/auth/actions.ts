@@ -5,6 +5,20 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 
+function getSafeRedirectPath(value: FormDataEntryValue | null) {
+  const path = String(value ?? "").trim();
+
+  if (
+    !path.startsWith("/") ||
+    path.startsWith("//") ||
+    path.includes("://")
+  ) {
+    return "/";
+  }
+
+  return path;
+}
+
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
@@ -13,22 +27,34 @@ export async function login(formData: FormData) {
     .toLowerCase();
 
   const password = String(formData.get("password") ?? "");
+  const redirectTo = getSafeRedirectPath(
+    formData.get("next")
+  );
 
   if (!email || !password) {
-    redirect("/login?error=Email and password are required");
+    redirect(
+      `/login?error=${encodeURIComponent(
+        "Email and password are required"
+      )}&next=${encodeURIComponent(redirectTo)}`
+    );
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { error } =
+    await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent(error.message)}`);
+    redirect(
+      `/login?error=${encodeURIComponent(
+        error.message
+      )}&next=${encodeURIComponent(redirectTo)}`
+    );
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect(redirectTo);
 }
 
 export async function signup(formData: FormData) {
@@ -41,7 +67,9 @@ export async function signup(formData: FormData) {
   const password = String(formData.get("password") ?? "");
 
   if (!email || !password) {
-    redirect("/signup?error=Email and password are required");
+    redirect(
+      "/signup?error=Email and password are required"
+    );
   }
 
   if (password.length < 6) {
@@ -64,7 +92,9 @@ export async function signup(formData: FormData) {
 
   if (error) {
     redirect(
-      `/signup?error=${encodeURIComponent(error.message)}`
+      `/signup?error=${encodeURIComponent(
+        error.message
+      )}`
     );
   }
 
@@ -82,7 +112,9 @@ export async function logout() {
 
   if (error) {
     redirect(
-      `/login?error=${encodeURIComponent(error.message)}`
+      `/login?error=${encodeURIComponent(
+        error.message
+      )}`
     );
   }
 

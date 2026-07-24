@@ -6,13 +6,28 @@ type LoginPageProps = {
   searchParams: Promise<{
     error?: string;
     message?: string;
+    next?: string;
   }>;
 };
+
+function getSafeNextPath(value: string | undefined) {
+  if (
+    !value ||
+    !value.startsWith("/") ||
+    value.startsWith("//") ||
+    value.includes("://")
+  ) {
+    return "/";
+  }
+
+  return value;
+}
 
 export default async function LoginPage({
   searchParams,
 }: LoginPageProps) {
-  const { error, message } = await searchParams;
+  const { error, message, next } = await searchParams;
+  const nextPath = getSafeNextPath(next);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#050505] px-6 py-24 text-white">
@@ -38,6 +53,12 @@ export default async function LoginPage({
         )}
 
         <form action={login} className="mt-8 space-y-5">
+          <input
+            type="hidden"
+            name="next"
+            value={nextPath}
+          />
+
           <div>
             <label
               htmlFor="email"
