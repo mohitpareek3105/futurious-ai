@@ -6,6 +6,7 @@ type ToolsPageProps = {
     search?: string;
     category?: string;
     pricing?: string;
+    sort?: string;
   }>;
 };
 
@@ -18,6 +19,7 @@ export default async function ToolsPage({
     search = "",
     category = "All",
     pricing = "All",
+    sort = "default",
   } = await searchParams;
 
   return (
@@ -26,6 +28,7 @@ export default async function ToolsPage({
       initialSearch={search}
       initialCategory={category}
       initialPricing={pricing}
+      initialSort={sort}
     />
   );
 }

@@ -17,6 +17,7 @@ type ToolsClientProps = {
   initialSearch?: string;
   initialCategory?: string;
   initialPricing?: string;
+  initialSort?: string;
 };
 
 function HeartIcon({ filled }: { filled: boolean }) {
@@ -59,6 +60,7 @@ export default function ToolsClient({
   initialSearch = "",
   initialCategory = "All",
   initialPricing = "All",
+  initialSort = "default",
 }: ToolsClientProps) {
   const [selectedCategory, setSelectedCategory] =
   useState(initialCategory);
@@ -67,6 +69,9 @@ const [search, setSearch] = useState(initialSearch);
 
 const [selectedPricing, setSelectedPricing] =
   useState(initialPricing);
+
+  const [selectedSort, setSelectedSort] =
+  useState(initialSort);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -87,6 +92,14 @@ const [selectedPricing, setSelectedPricing] =
   const pricingOptions = useMemo(() => {
   return ["All", ...new Set(tools.map((tool) => tool.pricing))];
 }, [tools]);
+
+const sortOptions = [
+  { value: "default", label: "Default" },
+  { value: "rating", label: "Top Rated" },
+  { value: "newest", label: "Newest" },
+  { value: "popular", label: "Most Popular" },
+  { value: "name", label: "A–Z" },
+];
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -127,6 +140,10 @@ useEffect(() => {
   setSelectedPricing(initialPricing);
 }, [initialPricing]);
 
+useEffect(() => {
+  setSelectedSort(initialSort);
+}, [initialSort]);
+
   function handleCategoryChange(category: string) {
     setSelectedCategory(category);
 
@@ -165,30 +182,81 @@ useEffect(() => {
   );
 }
 
-  const filteredTools = useMemo(() => {
-    const keyword = search.trim().toLowerCase();
+function handleSortChange(sort: string) {
+  setSelectedSort(sort);
 
-    return tools.filter((tool) => {
-      const matchesCategory =
-        selectedCategory === "All" ||
-        tool.category === selectedCategory;
+  const params = new URLSearchParams(searchParams.toString());
 
-      const matchesPricing =
-  selectedPricing === "All" ||
-  tool.pricing === selectedPricing;
+  if (sort === "default") {
+    params.delete("sort");
+  } else {
+    params.set("sort", sort);
+  }
 
-const matchesSearch =
-  keyword.length === 0 ||
-  tool.name.toLowerCase().includes(keyword) ||
-  tool.company.toLowerCase().includes(keyword) ||
-  tool.category.toLowerCase().includes(keyword) ||
-  tool.tags.some((tag) =>
-    tag.toLowerCase().includes(keyword)
+  const queryString = params.toString();
+
+  router.push(
+    queryString ? `${pathname}?${queryString}` : pathname,
+    { scroll: false }
   );
+}
 
-return matchesCategory && matchesPricing && matchesSearch;
-    });
-  }, [search, selectedCategory, selectedPricing, tools]);
+  const filteredTools = useMemo(() => {
+  const keyword = search.trim().toLowerCase();
+
+  const filtered = tools.filter((tool) => {
+    const matchesCategory =
+      selectedCategory === "All" ||
+      tool.category === selectedCategory;
+
+    const matchesPricing =
+      selectedPricing === "All" ||
+      tool.pricing === selectedPricing;
+
+    const matchesSearch =
+      keyword.length === 0 ||
+      tool.name.toLowerCase().includes(keyword) ||
+      tool.company.toLowerCase().includes(keyword) ||
+      tool.category.toLowerCase().includes(keyword) ||
+      tool.tags.some((tag) =>
+        tag.toLowerCase().includes(keyword)
+      );
+
+    return matchesCategory && matchesPricing && matchesSearch;
+  });
+
+  return [...filtered].sort((firstTool, secondTool) => {
+    switch (selectedSort) {
+      case "rating":
+        return secondTool.rating - firstTool.rating;
+
+      case "newest":
+        return (
+          new Date(secondTool.lastUpdated).getTime() -
+          new Date(firstTool.lastUpdated).getTime()
+        );
+
+      case "popular":
+        return secondTool.users.localeCompare(
+          firstTool.users,
+          undefined,
+          { numeric: true }
+        );
+
+      case "name":
+        return firstTool.name.localeCompare(secondTool.name);
+
+      default:
+        return 0;
+    }
+  });
+}, [
+  search,
+  selectedCategory,
+  selectedPricing,
+  selectedSort,
+  tools,
+]);
 
   return (
     <main className="min-h-screen bg-[#050505] px-4 py-16 text-white sm:px-6">
@@ -249,26 +317,55 @@ return matchesCategory && matchesPricing && matchesSearch;
         </div>
 
         {/* Pricing Filters */}
-        <div className="mt-4 flex flex-wrap justify-center gap-3">
-          {pricingOptions.map((pricing) => {
-            const isSelected = selectedPricing === pricing;
+<div className="mt-4 flex flex-wrap justify-center gap-3">
+  {pricingOptions.map((pricing) => {
+    const isSelected = selectedPricing === pricing;
 
-            return (
-              <button
-                key={pricing}
-                type="button"
-                onClick={() => handlePricingChange(pricing)}
-                className={`rounded-full border px-5 py-2 text-sm font-medium transition ${
-                  isSelected
-                    ? "border-green-500 bg-green-600 text-white shadow-lg shadow-green-600/20"
-                    : "border-white/10 bg-white/5 text-gray-300 hover:border-green-500/50 hover:bg-green-500/10 hover:text-white"
-                }`}
-              >
-                {pricing}
-              </button>
-            );
-          })}
-        </div>
+    return (
+      <button
+        key={pricing}
+        type="button"
+        onClick={() => handlePricingChange(pricing)}
+        className={`rounded-full border px-5 py-2 text-sm font-medium transition ${
+          isSelected
+            ? "border-green-500 bg-green-600 text-white shadow-lg shadow-green-600/20"
+            : "border-white/10 bg-white/5 text-gray-300 hover:border-green-500/50 hover:bg-green-500/10 hover:text-white"
+        }`}
+      >
+        {pricing}
+      </button>
+    );
+  })}
+</div>
+
+{/* Sorting */}
+<div className="mt-6 flex justify-center">
+  <div className="w-full max-w-xs">
+    <label
+      htmlFor="tools-sort"
+      className="mb-2 block text-sm font-medium text-gray-300"
+    >
+      Sort tools
+    </label>
+
+    <select
+      id="tools-sort"
+      value={selectedSort}
+      onChange={(event) => handleSortChange(event.target.value)}
+      className="w-full rounded-xl border border-white/10 bg-[#111827] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+    >
+      {sortOptions.map((option) => (
+        <option
+          key={option.value}
+          value={option.value}
+          className="bg-[#111827] text-white"
+        >
+          {option.label}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
 
         <p className="mb-8 mt-8 text-center text-sm text-gray-400">
           Showing {filteredTools.length} of {tools.length} tools
