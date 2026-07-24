@@ -16,6 +16,7 @@ type ToolsClientProps = {
   tools: AITool[];
   initialSearch?: string;
   initialCategory?: string;
+  initialPricing?: string;
 };
 
 function HeartIcon({ filled }: { filled: boolean }) {
@@ -57,11 +58,15 @@ export default function ToolsClient({
   tools,
   initialSearch = "",
   initialCategory = "All",
+  initialPricing = "All",
 }: ToolsClientProps) {
   const [selectedCategory, setSelectedCategory] =
-    useState(initialCategory);
+  useState(initialCategory);
 
-      const [search, setSearch] = useState(initialSearch);
+const [search, setSearch] = useState(initialSearch);
+
+const [selectedPricing, setSelectedPricing] =
+  useState(initialPricing);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -79,13 +84,9 @@ export default function ToolsClient({
     return ["All", ...new Set(tools.map((tool) => tool.category))];
   }, [tools]);
 
-  useEffect(() => {
-    setSelectedCategory(initialCategory);
-  }, [initialCategory]);
-
-    useEffect(() => {
-    setSearch(initialSearch);
-  }, [initialSearch]);
+  const pricingOptions = useMemo(() => {
+  return ["All", ...new Set(tools.map((tool) => tool.pricing))];
+}, [tools]);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -118,6 +119,14 @@ export default function ToolsClient({
     loadData();
   }, [loadData]);
 
+useEffect(() => {
+  setSelectedCategory(initialCategory);
+}, [initialCategory]);
+
+useEffect(() => {
+  setSelectedPricing(initialPricing);
+}, [initialPricing]);
+
   function handleCategoryChange(category: string) {
     setSelectedCategory(category);
 
@@ -137,6 +146,25 @@ export default function ToolsClient({
     );
   }
 
+  function handlePricingChange(pricing: string) {
+  setSelectedPricing(pricing);
+
+  const params = new URLSearchParams(searchParams.toString());
+
+  if (pricing === "All") {
+    params.delete("pricing");
+  } else {
+    params.set("pricing", pricing);
+  }
+
+  const queryString = params.toString();
+
+  router.push(
+    queryString ? `${pathname}?${queryString}` : pathname,
+    { scroll: false }
+  );
+}
+
   const filteredTools = useMemo(() => {
     const keyword = search.trim().toLowerCase();
 
@@ -145,18 +173,22 @@ export default function ToolsClient({
         selectedCategory === "All" ||
         tool.category === selectedCategory;
 
-      const matchesSearch =
-        keyword.length === 0 ||
-        tool.name.toLowerCase().includes(keyword) ||
-        tool.company.toLowerCase().includes(keyword) ||
-        tool.category.toLowerCase().includes(keyword) ||
-        tool.tags.some((tag) =>
-          tag.toLowerCase().includes(keyword)
-        );
+      const matchesPricing =
+  selectedPricing === "All" ||
+  tool.pricing === selectedPricing;
 
-      return matchesCategory && matchesSearch;
+const matchesSearch =
+  keyword.length === 0 ||
+  tool.name.toLowerCase().includes(keyword) ||
+  tool.company.toLowerCase().includes(keyword) ||
+  tool.category.toLowerCase().includes(keyword) ||
+  tool.tags.some((tag) =>
+    tag.toLowerCase().includes(keyword)
+  );
+
+return matchesCategory && matchesPricing && matchesSearch;
     });
-  }, [search, selectedCategory, tools]);
+  }, [search, selectedCategory, selectedPricing, tools]);
 
   return (
     <main className="min-h-screen bg-[#050505] px-4 py-16 text-white sm:px-6">
@@ -194,6 +226,7 @@ export default function ToolsClient({
           />
         </div>
 
+        {/* Category Filters */}
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           {categories.map((category) => {
             const isSelected = selectedCategory === category;
@@ -210,6 +243,28 @@ export default function ToolsClient({
                 }`}
               >
                 {category}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Pricing Filters */}
+        <div className="mt-4 flex flex-wrap justify-center gap-3">
+          {pricingOptions.map((pricing) => {
+            const isSelected = selectedPricing === pricing;
+
+            return (
+              <button
+                key={pricing}
+                type="button"
+                onClick={() => handlePricingChange(pricing)}
+                className={`rounded-full border px-5 py-2 text-sm font-medium transition ${
+                  isSelected
+                    ? "border-green-500 bg-green-600 text-white shadow-lg shadow-green-600/20"
+                    : "border-white/10 bg-white/5 text-gray-300 hover:border-green-500/50 hover:bg-green-500/10 hover:text-white"
+                }`}
+              >
+                {pricing}
               </button>
             );
           })}

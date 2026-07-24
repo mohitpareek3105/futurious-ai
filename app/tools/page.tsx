@@ -5,6 +5,7 @@ type ToolsPageProps = {
   searchParams: Promise<{
     search?: string;
     category?: string;
+    pricing?: string;
   }>;
 };
 
@@ -16,6 +17,7 @@ export default async function ToolsPage({
   const {
     search = "",
     category = "All",
+    pricing = "All",
   } = await searchParams;
 
   return (
@@ -23,6 +25,7 @@ export default async function ToolsPage({
       tools={tools}
       initialSearch={search}
       initialCategory={category}
+      initialPricing={pricing}
     />
   );
 }
