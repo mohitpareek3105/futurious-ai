@@ -1,15 +1,19 @@
 import type { MetadataRoute } from "next";
 
 import { blogs } from "@/data/blogs";
-import { categories } from "@/data/categories";
 import { prompts } from "@/data/prompts";
+import { getAllCategories } from "@/lib/categories";
 import { siteConfig } from "@/lib/site-config";
 import { getAllTools } from "@/lib/tools";
 
 export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const tools = await getAllTools();
+  const [tools, categories] = await Promise.all([
+    getAllTools(),
+    getAllCategories(),
+  ]);
+
   const currentDate = new Date();
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -60,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.7,
-    })
+    }),
   );
 
   const blogPages: MetadataRoute.Sitemap = blogs.map((blog) => ({
@@ -70,12 +74,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: blog.featured ? 0.8 : 0.7,
   }));
 
-  const promptPages: MetadataRoute.Sitemap = prompts.map((prompt) => ({
-    url: `${siteConfig.url}/prompts/${prompt.slug}`,
-    lastModified: currentDate,
-    changeFrequency: "monthly",
-    priority: prompt.featured ? 0.7 : 0.6,
-  }));
+  const promptPages: MetadataRoute.Sitemap = prompts.map(
+    (prompt) => ({
+      url: `${siteConfig.url}/prompts/${prompt.slug}`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: prompt.featured ? 0.7 : 0.6,
+    }),
+  );
 
   return [
     ...staticPages,

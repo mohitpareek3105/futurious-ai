@@ -2,9 +2,10 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import CategoryCard from "@/components/category/CategoryCard";
-import { categories } from "@/data/categories";
+import { getAllCategories } from "@/lib/categories";
 
-export default function HomeCategories() {
+export default async function HomeCategories() {
+  const categories = await getAllCategories();
   const homepageCategories = categories.slice(0, 8);
 
   return (
@@ -28,7 +29,7 @@ export default function HomeCategories() {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {homepageCategories.map((category) => (
             <CategoryCard
-              key={category.slug}
+              key={category.id}
               name={category.name}
               slug={category.slug}
               icon={category.icon}

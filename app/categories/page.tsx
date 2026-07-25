@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from "next";
 
 import CategoryCard from "@/components/category/CategoryCard";
-import { categories } from "@/data/categories";
+import { getAllCategories } from "@/lib/categories";
 
 export const metadata: Metadata = {
   title: "AI Tool Categories",
@@ -25,7 +25,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const categories = await getAllCategories();
+
   return (
     <main className="min-h-screen bg-[#050505] px-6 py-16 text-white">
       <div className="mx-auto mt-14 max-w-7xl">
@@ -47,7 +49,7 @@ export default function CategoriesPage() {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((category) => (
             <CategoryCard
-              key={category.slug}
+              key={category.id}
               name={category.name}
               slug={category.slug}
               icon={category.icon}

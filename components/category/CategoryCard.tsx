@@ -1,18 +1,21 @@
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
 import { ArrowUpRight } from "lucide-react";
+
+import { getCategoryIcon } from "@/lib/category-icons";
 
 type Props = {
   name: string;
   slug: string;
-  icon: LucideIcon;
+  icon: string;
 };
 
 export default function CategoryCard({
   name,
   slug,
-  icon: Icon,
+  icon,
 }: Props) {
+  const Icon = getCategoryIcon(icon);
+
   return (
     <Link
       href={`/categories/${slug}`}

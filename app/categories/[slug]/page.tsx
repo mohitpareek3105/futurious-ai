@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import ToolsClient from "@/components/tools/ToolsClient";
-import { categories } from "@/data/categories";
+import { getCategoryBySlug } from "@/lib/categories";
 import { siteConfig } from "@/lib/site-config";
 import { getToolsByCategorySlug } from "@/lib/tools";
 
@@ -17,9 +17,7 @@ export async function generateMetadata({
 }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  const category = categories.find(
-    (item) => item.slug === slug,
-  );
+  const category = await getCategoryBySlug(slug);
 
   if (!category) {
     return {
@@ -81,9 +79,7 @@ export default async function CategoryPage({
 }: CategoryPageProps) {
   const { slug } = await params;
 
-  const category = categories.find(
-    (item) => item.slug === slug,
-  );
+  const category = await getCategoryBySlug(slug);
 
   if (!category) {
     notFound();
