@@ -47,6 +47,26 @@ export async function getAllCategories(): Promise<Category[]> {
   return (data ?? []).map(mapCategory);
 }
 
+export async function getCategoryById(
+  id: number,
+): Promise<Category | null> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("categories")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(
+      `Unable to load category: ${error.message}`,
+    );
+  }
+
+  return data ? mapCategory(data) : null;
+}
+
 export async function getCategoryBySlug(
   slug: string,
 ): Promise<Category | null> {

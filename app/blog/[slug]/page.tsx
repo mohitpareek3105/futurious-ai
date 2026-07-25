@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import BlogMeta from "@/components/blog/BlogMeta";
 import BlogTags from "@/components/blog/BlogTags";
 import ShareButtons from "@/components/blog/ShareButtons";
-import { blogs } from "@/data/blogs";
+import { getBlogBySlug } from "@/lib/blogs";
 import { siteConfig } from "@/lib/site-config";
 
 type Props = {
@@ -45,14 +45,26 @@ function formatPublishedDateForSchema(
   return parsedDate.toISOString().split("T")[0];
 }
 
+function getAbsoluteImageUrl(imageUrl: string) {
+  if (
+    imageUrl.startsWith("http://") ||
+    imageUrl.startsWith("https://")
+  ) {
+    return imageUrl;
+  }
+
+  const normalizedPath = imageUrl.startsWith("/")
+    ? imageUrl
+    : `/${imageUrl}`;
+
+  return `${siteConfig.url}${normalizedPath}`;
+}
+
 export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
   const { slug } = await params;
-
-  const blog = blogs.find(
-    (item) => item.slug === slug,
-  );
+  const blog = await getBlogBySlug(slug);
 
   if (!blog) {
     return {
@@ -74,6 +86,9 @@ export async function generateMetadata({
   );
 
   const canonicalPath = `/blog/${blog.slug}`;
+  const coverImageUrl = getAbsoluteImageUrl(
+    blog.coverImage,
+  );
 
   return {
     title,
@@ -96,7 +111,7 @@ export async function generateMetadata({
       tags: blog.tags,
       images: [
         {
-          url: blog.coverImage,
+          url: coverImageUrl,
           alt: blog.title,
         },
       ],
@@ -106,7 +121,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [blog.coverImage],
+      images: [coverImageUrl],
     },
 
     keywords: [
@@ -124,10 +139,7 @@ export default async function BlogDetail({
   params,
 }: Props) {
   const { slug } = await params;
-
-  const blog = blogs.find(
-    (item) => item.slug === slug,
-  );
+  const blog = await getBlogBySlug(slug);
 
   if (!blog) {
     notFound();
@@ -135,6 +147,10 @@ export default async function BlogDetail({
 
   const canonicalUrl =
     `${siteConfig.url}/blog/${blog.slug}`;
+
+  const coverImageUrl = getAbsoluteImageUrl(
+    blog.coverImage,
+  );
 
   const description = createMetaDescription(
     blog.title,
@@ -174,7 +190,7 @@ export default async function BlogDetail({
     "@type": "BlogPosting",
     headline: blog.title,
     description,
-    image: `${siteConfig.url}${blog.coverImage}`,
+    image: coverImageUrl,
     datePublished: publishedDate,
     author: {
       "@type": "Person",

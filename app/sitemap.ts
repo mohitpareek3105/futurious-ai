@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { blogs } from "@/data/blogs";
 import { prompts } from "@/data/prompts";
+import { getPublishedBlogs } from "@/lib/blogs";
 import { getAllCategories } from "@/lib/categories";
 import { siteConfig } from "@/lib/site-config";
 import { getAllTools } from "@/lib/tools";
@@ -9,9 +9,10 @@ import { getAllTools } from "@/lib/tools";
 export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [tools, categories] = await Promise.all([
+  const [tools, categories, blogs] = await Promise.all([
     getAllTools(),
     getAllCategories(),
+    getPublishedBlogs(),
   ]);
 
   const currentDate = new Date();
@@ -69,7 +70,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogPages: MetadataRoute.Sitemap = blogs.map((blog) => ({
     url: `${siteConfig.url}/blog/${blog.slug}`,
-    lastModified: currentDate,
+    lastModified: blog.publishedAt
+      ? new Date(blog.publishedAt)
+      : currentDate,
     changeFrequency: "monthly",
     priority: blog.featured ? 0.8 : 0.7,
   }));
