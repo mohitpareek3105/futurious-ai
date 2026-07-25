@@ -298,6 +298,155 @@ export async function createBlog(
   );
 }
 
+export async function updateBlog(
+  previousState: BlogFormState,
+  formData: FormData,
+): Promise<BlogFormState> {
+  await requireAdmin();
+
+  const blogIdValue = getFormString(formData, "blogId");
+  const blogId = Number(blogIdValue);
+
+  if (!Number.isInteger(blogId) || blogId <= 0) {
+    return {
+      success: false,
+      message: "Unable to update the blog article.",
+      errors: {
+        form: "Invalid blog ID.",
+      },
+    };
+  }
+
+  const values = parseBlogFormData(formData);
+  const errors = validateBlogValues(values);
+
+  if (hasValidationErrors(errors)) {
+    return {
+      success: false,
+      message:
+        "Please correct the highlighted fields and try again.",
+      errors,
+      values,
+    };
+  }
+
+  const supabase = await createClient();
+
+  const { data: existingBlog, error: readError } =
+    await supabase
+      .from("blogs")
+      .select("id, title, slug")
+      .eq("id", blogId)
+      .maybeSingle();
+
+  if (readError) {
+    return {
+      success: false,
+      message: "Unable to load the blog article.",
+      errors: {
+        form: readError.message,
+      },
+      values,
+    };
+  }
+
+  if (!existingBlog) {
+    return {
+      success: false,
+      message: "The blog article was not found.",
+      errors: {
+        form:
+          "This article may have been deleted. Return to the blog list and try again.",
+      },
+      values,
+    };
+  }
+
+  const { data: duplicateBlog, error: slugCheckError } =
+    await supabase
+      .from("blogs")
+      .select("id")
+      .eq("slug", values.slug)
+      .neq("id", blogId)
+      .maybeSingle();
+
+  if (slugCheckError) {
+    return {
+      success: false,
+      message:
+        "Unable to verify the blog URL slug.",
+      errors: {
+        form: slugCheckError.message,
+      },
+      values,
+    };
+  }
+
+  if (duplicateBlog) {
+    return {
+      success: false,
+      message:
+        "A blog article with this URL slug already exists.",
+      errors: {
+        slug:
+          "Choose a different URL slug for this article.",
+      },
+      values,
+    };
+  }
+
+  const { error: updateError } = await supabase
+    .from("blogs")
+    .update({
+      title: values.title,
+      slug: values.slug,
+      excerpt: values.excerpt,
+      content: values.content,
+      category: values.category,
+      tags: values.tags,
+      reading_time: values.readingTime,
+      author: values.author,
+      cover_image: values.coverImage,
+      featured: values.featured,
+      published: values.published,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", blogId);
+
+  if (updateError) {
+    const duplicateSlug =
+      updateError.code === "23505";
+
+    return {
+      success: false,
+      message: duplicateSlug
+        ? "A blog article with this URL slug already exists."
+        : "Unable to update the blog article.",
+      errors: duplicateSlug
+        ? {
+            slug:
+              "Choose a different URL slug for this article.",
+          }
+        : {
+            form: updateError.message,
+          },
+      values,
+    };
+  }
+
+  revalidateBlogPaths(existingBlog.slug);
+
+  if (existingBlog.slug !== values.slug) {
+    revalidateBlogPaths(values.slug);
+  }
+
+  redirect(
+    `/admin/blog?message=${encodeURIComponent(
+      `${values.title} was updated successfully.`,
+    )}`,
+  );
+}
+
 export async function toggleBlogFeatured(
   blogId: number,
   featured: boolean,
