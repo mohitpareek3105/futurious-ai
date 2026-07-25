@@ -88,6 +88,38 @@ export async function getFeaturedTools(): Promise<AITool[]> {
   return (data as ToolRow[]).map(mapTool);
 }
 
+export async function getToolById(
+  id: number,
+): Promise<AITool | null> {
+  if (!Number.isInteger(id) || id <= 0) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("tools")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to fetch tool by ID:", {
+      id,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    });
+
+    throw new Error(`Unable to load tool with ID: ${id}`);
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  return mapTool(data as ToolRow);
+}
+
 export async function getToolBySlug(
   slug: string
 ): Promise<AITool | null> {
