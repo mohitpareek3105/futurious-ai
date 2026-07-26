@@ -257,11 +257,11 @@ export default async function BlogDetail({
             readingTime={blog.readingTime}
           />
 
-          <div className="mt-12">
-            <pre className="whitespace-pre-wrap font-sans text-lg leading-8 text-gray-300">
-              {blog.content}
-            </pre>
-          </div>
+          <div className="mt-12 whitespace-pre-wrap font-sans text-lg leading-8 text-gray-300">
+  {blog.content
+    .replace(/\r\n?/g, "\n")
+    .replace(/^\n+/, "")}
+</div>
 
           <BlogTags tags={blog.tags} />
 
