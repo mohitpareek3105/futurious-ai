@@ -276,17 +276,17 @@ export default async function BlogDetail({
     remarkPlugins={[remarkGfm]}
     components={{
       h1: ({ children }) => (
-        <h2 className="mt-12 mb-6 text-4xl font-bold text-white">
+        <h1 className="mb-6 mt-12 text-4xl font-bold text-white">
           {children}
-        </h2>
+        </h1>
       ),
       h2: ({ children }) => (
-        <h2 className="mt-10 mb-5 text-3xl font-bold text-white">
+        <h2 className="mb-5 mt-10 text-3xl font-bold text-white">
           {children}
         </h2>
       ),
       h3: ({ children }) => (
-        <h3 className="mt-8 mb-4 text-2xl font-semibold text-white">
+        <h3 className="mb-4 mt-8 text-2xl font-semibold text-white">
           {children}
         </h3>
       ),
@@ -368,11 +368,11 @@ export default async function BlogDetail({
   </ReactMarkdown>
 </div>
 
-          <BlogTags tags={blog.tags} />
+<BlogTags tags={blog.tags} />
 
-          <ShareButtons title={blog.title} />
-        </article>
-      </main>
-    </>
-  );
+<ShareButtons title={blog.title} />
+      </article>
+    </main>
+  </>
+);
 }
