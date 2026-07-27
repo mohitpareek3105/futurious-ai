@@ -4,8 +4,11 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import PromptDetail from "@/components/prompt/PromptDetail";
-import { prompts } from "@/data/prompts";
 import { siteConfig } from "@/lib/site-config";
+import {
+  getPromptBySlug,
+  getRelatedPrompts,
+} from "@/lib/prompts";
 
 type Props = {
   params: Promise<{
@@ -34,9 +37,7 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = await params;
 
-  const prompt = prompts.find(
-    (item) => item.slug === slug,
-  );
+  const prompt = await getPromptBySlug(slug);
 
   if (!prompt) {
     return {
@@ -99,9 +100,7 @@ export default async function PromptPage({
 }: Props) {
   const { slug } = await params;
 
-  const prompt = prompts.find(
-    (item) => item.slug === slug,
-  );
+  const prompt = await getPromptBySlug(slug);
 
   if (!prompt) {
     notFound();

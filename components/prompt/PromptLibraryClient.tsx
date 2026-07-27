@@ -6,9 +6,17 @@ import { Library } from "lucide-react";
 import PromptCard from "@/components/prompt/PromptCard";
 import PromptCategory from "@/components/prompt/PromptCategory";
 import PromptSearch from "@/components/prompt/PromptSearch";
-import { prompts } from "@/data/prompts";
 
-export default function PromptLibraryClient() {
+import type { Prompt } from "@/types/prompt";
+
+type PromptLibraryClientProps = {
+  prompts: Prompt[];
+};
+
+export default function PromptLibraryClient({
+  prompts,
+}: PromptLibraryClientProps) {
+  
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState("All");
 
