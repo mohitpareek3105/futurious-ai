@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/home/Footer";
 import { createClient } from "@/lib/supabase/server";
 import { siteConfig } from "@/lib/site-config";
 
@@ -122,7 +124,7 @@ export default async function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[#050505] text-white">
+      <body className="flex min-h-full flex-col bg-[#050505] text-white">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -132,8 +134,12 @@ export default async function RootLayout({
 
         <Navbar userEmail={user?.email ?? null} />
 
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
+
+        <Footer />
       </body>
+
+      <GoogleAnalytics gaId="G-Z10LQH07BW" />
     </html>
   );
 }
