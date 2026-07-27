@@ -16,6 +16,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: `${siteConfig.url}/sitemap.xml`,
+    sitemap: "https://futuriousai.com/sitemap.xml",
   };
 }

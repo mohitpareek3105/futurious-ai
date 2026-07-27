@@ -9,6 +9,8 @@ import { getAllTools } from "@/lib/tools";
 export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = siteConfig.url.replace(/\/$/, "");
+
   const [tools, categories, blogs] = await Promise.all([
     getAllTools(),
     getAllCategories(),
@@ -19,39 +21,69 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: siteConfig.url,
+      url: baseUrl,
       lastModified: currentDate,
       changeFrequency: "daily",
       priority: 1,
     },
     {
-      url: `${siteConfig.url}/tools`,
+      url: `${baseUrl}/tools`,
       lastModified: currentDate,
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
-      url: `${siteConfig.url}/categories`,
+      url: `${baseUrl}/categories`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${siteConfig.url}/blog`,
+      url: `${baseUrl}/blog`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${siteConfig.url}/prompts`,
+      url: `${baseUrl}/prompts`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/disclaimer`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
   ];
 
   const toolPages: MetadataRoute.Sitemap = tools.map((tool) => ({
-    url: `${siteConfig.url}/tools/${tool.slug}`,
+    url: `${baseUrl}/tools/${tool.slug}`,
     lastModified: tool.lastUpdated
       ? new Date(tool.lastUpdated)
       : currentDate,
@@ -61,7 +93,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const categoryPages: MetadataRoute.Sitemap = categories.map(
     (category) => ({
-      url: `${siteConfig.url}/categories/${category.slug}`,
+      url: `${baseUrl}/categories/${category.slug}`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.7,
@@ -69,7 +101,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   const blogPages: MetadataRoute.Sitemap = blogs.map((blog) => ({
-    url: `${siteConfig.url}/blog/${blog.slug}`,
+    url: `${baseUrl}/blog/${blog.slug}`,
     lastModified: blog.publishedAt
       ? new Date(blog.publishedAt)
       : currentDate,
@@ -77,14 +109,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: blog.featured ? 0.8 : 0.7,
   }));
 
-  const promptPages: MetadataRoute.Sitemap = prompts.map(
-    (prompt) => ({
-      url: `${siteConfig.url}/prompts/${prompt.slug}`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: prompt.featured ? 0.7 : 0.6,
-    }),
-  );
+  const promptPages: MetadataRoute.Sitemap = prompts.map((prompt) => ({
+    url: `${baseUrl}/prompts/${prompt.slug}`,
+    lastModified: currentDate,
+    changeFrequency: "monthly",
+    priority: prompt.featured ? 0.7 : 0.6,
+  }));
 
   return [
     ...staticPages,

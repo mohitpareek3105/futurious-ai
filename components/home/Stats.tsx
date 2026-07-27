@@ -20,23 +20,21 @@ export default function Stats() {
 
   return (
     <section className="mt-16">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-
+      <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
         {stats.map((item) => (
           <div
             key={item.label}
-            className="bg-[#111827] border border-gray-800 rounded-2xl p-8 text-center hover:border-blue-500 transition"
+            className="rounded-2xl border border-gray-800 bg-[#111827] p-8 text-center transition hover:border-blue-500"
           >
             <h3 className="text-4xl font-bold text-blue-500">
               {item.value}
             </h3>
 
-            <p className="text-gray-400 mt-3">
+            <p className="mt-3 text-gray-400">
               {item.label}
             </p>
           </div>
         ))}
-
       </div>
     </section>
   );
