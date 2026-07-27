@@ -1,5 +1,4 @@
 ﻿import Link from "next/link";
-import Image from "next/image";
 import { getFeaturedTools } from "@/lib/tools";
 
 export default async function FeaturedTools() {
